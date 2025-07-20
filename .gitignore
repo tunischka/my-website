@@ -1,0 +1,11 @@
+# node.js
+node_modules/
+.env
+.DS_Store
+.vscode/
+dist/
+*.log
+
+# Tailwind JIT cache
+.cache/
+
