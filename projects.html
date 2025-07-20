@@ -14,6 +14,19 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mobirise/mobirise5@main/m5-theme/css/style.css">
   <!-- kendi ek CSS’in varsa -->
   <link rel="stylesheet" href="style.css">
+  
+  <!-- tag colouring system -->
+  <style>
+    /* Rozet formu → ince çerçeve + yumuşak dolgu */
+    .badge.tag-pill {
+      border: 1px solid currentColor;
+      background-color: transparent;   /* JS dolgu rengi ekleyecek */
+      padding: .35em .6em;
+      font-weight: 500;
+      border-radius: 9999px;           /* tam kapsül */
+    }
+  </style>
+    
 </head>
 
 <body>
@@ -36,13 +49,39 @@
   </div>
 </section>
 
-<!-- 📦  PROJECT CARD -->
+<!-- 🔍 FILTER & SORT CONTROLS -->
+<section class="py-3">
+  <div class="container d-flex flex-wrap align-items-center gap-3">
+
+    <!-- Sort dropdown -->
+    <div class="input-group" style="max-width:220px;">
+      <label class="input-group-text" for="sortSelect">Sort</label>
+      <select class="form-select" id="sortSelect">
+        <option value="az" selected>A → Z</option>
+        <option value="za">Z → A</option>
+      </select>
+    </div>
+
+    <!-- Tag buttons -->
+    <div id="tagFilters" class="d-flex flex-wrap gap-2">
+      <button class="btn btn-outline-secondary btn-sm active" data-tag="all">All</button>
+      <button class="btn btn-outline-secondary btn-sm" data-tag="forensics">Forensics</button>
+      <button class="btn btn-outline-secondary btn-sm" data-tag="malware">Malware</button>
+      <!-- ek etiket butonları… -->
+    </div>
+
+  </div>
+</section>
+
+
+<!-- 📦  PROJECT CARDs -->
 <section class="article07" id="article07-abcd-bank">
   <div class="container">
     <div class="row justify-content-center">
 
-      <div class="card col-md-12 col-lg-10 shadow-lg rounded-4 overflow-hidden position-relative">
-
+      <div class="card col-md-12 col-lg-10 shadow-lg rounded-4 overflow-hidden position-relative"
+           data-title="Angler Exploit Kit – PCAP Network Forensics Case Study"
+           data-tags="forensics,malware">
         <div class="card-wrapper p-4 p-md-5">
 
           <!-- 🔗  STRETCHED LINK  — artık içinde görünmez span var -->
@@ -93,5 +132,80 @@
 
 <!-- Bootstrap JS  -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+  
+    /* ── Yardımcı: Etiketten tutarlı pastel renk üret (HSL) ── */
+    const tagColor = (tag) => {
+      /* Basit hash → 0-359 arası renk tonu */
+      let hash = 0;
+      for (let i = 0; i < tag.length; i++) hash = tag.charCodeAt(i) + ((hash << 5) - hash);
+      const hue = hash % 360;
+      const text   = `hsl(${hue} 60% 35%)`;     // koyu
+      const fill   = `hsla(${hue} 70% 45% / .18)`; // yarı saydam
+      return { text, fill };
+    };
+  
+    /* ── Seçiciler ── */
+    const cards      = [...document.querySelectorAll('[data-title]')];
+    const sortSelect = document.getElementById('sortSelect');
+    const tagBtns    = [...document.querySelectorAll('#tagFilters [data-tag]')];
+    let   activeTag  = 'all';
+  
+    /* ── Ana fonksiyon ── */
+    function render() {
+      /* (a) Rozet üret */
+      cards.forEach(card => {
+        if (!card.querySelector('.tag-badges')) {
+          const tagBox = document.createElement('p');
+          tagBox.className = 'mt-3 tag-badges';
+  
+          card.dataset.tags.split(',').forEach(raw => {
+            const t = raw.trim();
+            const { text, fill } = tagColor(t);
+  
+            const span = document.createElement('span');
+            span.className = 'badge tag-pill me-1';
+            span.style.color = text;
+            span.style.backgroundColor = fill;
+            span.textContent = t.charAt(0).toUpperCase() + t.slice(1);
+            tagBox.appendChild(span);
+          });
+  
+          card.querySelector('.card-box').appendChild(tagBox);
+        }
+      });
+  
+      /* (b) Filtrele */
+      const visible = cards.filter(c =>
+        activeTag === 'all' || c.dataset.tags.split(',').includes(activeTag));
+  
+      /* (c) Sırala */
+      visible.sort((a, b) =>
+        sortSelect.value === 'az'
+          ? a.dataset.title.localeCompare(b.dataset.title)
+          : b.dataset.title.localeCompare(a.dataset.title));
+  
+      /* (d) DOM güncelle */
+      const parent = cards[0].parentNode;
+      visible.forEach(card => parent.appendChild(card));
+      cards.forEach(card => card.style.display =
+        visible.includes(card) ? '' : 'none');
+    }
+  
+    /* ── Olay dinleyicileri ── */
+    sortSelect.addEventListener('change', render);
+    tagBtns.forEach(btn => btn.addEventListener('click', () => {
+      tagBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeTag = btn.dataset.tag;
+      render();
+    }));
+  
+    render(); // ilk çizim
+  });
+</script>
+  
+  
 </body>
 </html>
