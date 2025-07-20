@@ -8,203 +8,54 @@
 
   <title>Tuna | Projects</title>
 
-  <!-- ikonlar + bootstrap + tema -->
+  <!-- ikonlar, bootstrap, tema -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mobirise-icons@2.0.0/mobirise2.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mobirise/mobirise5@main/m5-theme/css/style.css">
-  <!-- kendi ek CSS’in varsa -->
+
+  <!-- kendi ek CSS -->
   <link rel="stylesheet" href="style.css">
-  
-  <!-- tag colouring system -->
+
+  <!-- badge / pill görünümü -->
   <style>
-    /* Rozet formu → ince çerçeve + yumuşak dolgu */
     .badge.tag-pill {
       border: 1px solid currentColor;
-      background-color: transparent;   /* JS dolgu rengi ekleyecek */
+      background-color: transparent;
       padding: .35em .6em;
       font-weight: 500;
-      border-radius: 9999px;           /* tam kapsül */
+      border-radius: 9999px;
     }
   </style>
-    
 </head>
 
 <body>
 
-
-<!-- 🧭 Navbar -->
-<nav class="bg-white shadow p-4 flex justify-between items-center">
-  <h1 class="text-xl font-bold">Tuna</h1>
-  <ul class="flex gap-4">
-    <li><a href="index.html" class="hover:text-blue-500">Home</a></li>
-    <li><a href="cv.html" class="hover:text-blue-500">CV</a></li>
-    <li><a href="projects.html" class="hover: text-blue-600">Projects</a></li>
+<!-- Navbar -->
+<nav class="bg-white shadow p-4 d-flex justify-content-between align-items-center">
+  <h1 class="h4 fw-bold mb-0">Tuna</h1>
+  <ul class="d-flex gap-3 list-unstyled mb-0">
+    <li><a href="index.html" class="text-decoration-none">Home</a></li>
+    <li><a href="cv.html" class="text-decoration-none">CV</a></li>
+    <li><a href="projects.html" class="text-decoration-none fw-semibold">Projects</a></li>
   </ul>
 </nav>
 
-<!-- 🔧  SECTION TITLE -->
-<section class="py-5">
-  <div class="container text-center">
-    <h2 class="display-2 fw-bold"><span>🛠️</span> My Projects</h2>
+<!-- SECTION TITLE -->
+<section class="py-5 text-center">
+  <div class="container">
+    <h2 class="display-5 fw-bold">My Projects</h2>
   </div>
 </section>
 
-<!-- 🔍 FILTER & SORT CONTROLS -->
+<!-- FILTER & SORT CONTROLS -->
 <section class="py-3">
   <div class="container d-flex flex-wrap align-items-center gap-3">
 
     <!-- Sort dropdown -->
     <div class="input-group" style="max-width:220px;">
       <label class="input-group-text" for="sortSelect">Sort</label>
-      <select class="form-select" id="sortSelect">
-        <option value="az" selected>A → Z</option>
-        <option value="za">Z → A</option>
-      </select>
-    </div>
 
-    <!-- Tag buttons -->
-    <div id="tagFilters" class="d-flex flex-wrap gap-2">
-      <button class="btn btn-outline-secondary btn-sm active" data-tag="all">All</button>
-      <button class="btn btn-outline-secondary btn-sm" data-tag="forensics">Forensics</button>
-      <button class="btn btn-outline-secondary btn-sm" data-tag="malware">Malware</button>
-      <!-- ek etiket butonları… -->
-    </div>
-
-  </div>
-</section>
-
-
-<!-- 📦  PROJECT CARDs -->
-<section class="article07" id="article07-abcd-bank">
-  <div class="container">
-    <div class="row justify-content-center">
-
-      <div class="card col-md-12 col-lg-10 shadow-lg rounded-4 overflow-hidden position-relative"
-           data-title="Angler Exploit Kit – PCAP Network Forensics Case Study"
-           data-tags="forensics,malware">
-        <div class="card-wrapper p-4 p-md-5">
-
-          <!-- 🔗  STRETCHED LINK  — artık içinde görünmez span var -->
-          <a href="Angler-Exploit-Kit.html" class="stretched-link">
-            <span class="visually-hidden">Open Angler Exploit Kit project</span>
-          </a>
-
-          <!-- Başlık -->
-          <h3 class="card-title display-6 fw-bold mb-4">
-            🕵️ Angler Exploit Kit – PCAP Network Forensics Case Study
-          </h3>
-
-          <!-- İçerik -->
-          <div class="row card-box align-left">
-            <div class="item col-12">
-              <div class="item-wrapper">
-                <h4 class="mbr-section-subtitle mb-3 fs-4 fw-semibold">Case Overview</h4>
-                <p class="mbr-text fs-5">
-                  PCAP forensics on a multi-stage Angler EK attack chain using malicious Java payloads.
-                </p>
-              </div>
-            </div>
-          </div><!-- /.card-box -->
-
-        </div><!-- /.card-wrapper -->
-      </div><!-- /.card -->
-
-    </div>
-  </div>
-</section>
-
-
-
-<!-- ⌛ PLACEHOLDER -->
-<section class="py-5">
-  <div class="container">
-    <div class="rounded-4 border-4 border-dashed border-secondary bg-light text-center py-5">
-      <h4 class="fs-2 fw-semibold text-secondary mb-2">More Projects Coming Soon</h4>
-      <p class="text-muted">Stay tuned for upcoming work.</p>
-    </div>
-  </div>
-</section>
-
-<!-- 📜 FOOTER -->
-<footer class="text-center py-4 border-top">
-  <small class="text-muted">© 2025 Tuna Gökgöz</small>
-</footer>
-
-<!-- Bootstrap JS  -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
   
-    /* ── Yardımcı: Etiketten tutarlı pastel renk üret (HSL) ── */
-    const tagColor = (tag) => {
-      /* Basit hash → 0-359 arası renk tonu */
-      let hash = 0;
-      for (let i = 0; i < tag.length; i++) hash = tag.charCodeAt(i) + ((hash << 5) - hash);
-      const hue = hash % 360;
-      const text   = `hsl(${hue} 60% 35%)`;     // koyu
-      const fill   = `hsla(${hue} 70% 45% / .18)`; // yarı saydam
-      return { text, fill };
-    };
-  
-    /* ── Seçiciler ── */
-    const cards      = [...document.querySelectorAll('[data-title]')];
-    const sortSelect = document.getElementById('sortSelect');
-    const tagBtns    = [...document.querySelectorAll('#tagFilters [data-tag]')];
-    let   activeTag  = 'all';
-  
-    /* ── Ana fonksiyon ── */
-    function render() {
-      /* (a) Rozet üret */
-      cards.forEach(card => {
-        if (!card.querySelector('.tag-badges')) {
-          const tagBox = document.createElement('p');
-          tagBox.className = 'mt-3 tag-badges';
-  
-          card.dataset.tags.split(',').forEach(raw => {
-            const t = raw.trim();
-            const { text, fill } = tagColor(t);
-  
-            const span = document.createElement('span');
-            span.className = 'badge tag-pill me-1';
-            span.style.color = text;
-            span.style.backgroundColor = fill;
-            span.textContent = t.charAt(0).toUpperCase() + t.slice(1);
-            tagBox.appendChild(span);
-          });
-  
-          card.querySelector('.card-box').appendChild(tagBox);
-        }
-      });
-  
-      /* (b) Filtrele */
-      const visible = cards.filter(c =>
-        activeTag === 'all' || c.dataset.tags.split(',').includes(activeTag));
-  
-      /* (c) Sırala */
-      visible.sort((a, b) =>
-        sortSelect.value === 'az'
-          ? a.dataset.title.localeCompare(b.dataset.title)
-          : b.dataset.title.localeCompare(a.dataset.title));
-  
-      /* (d) DOM güncelle */
-      const parent = cards[0].parentNode;
-      visible.forEach(card => parent.appendChild(card));
-      cards.forEach(card => card.style.display =
-        visible.includes(card) ? '' : 'none');
-    }
-  
-    /* ── Olay dinleyicileri ── */
-    sortSelect.addEventListener('change', render);
-    tagBtns.forEach(btn => btn.addEventListener('click', () => {
-      tagBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      activeTag = btn.dataset.tag;
-      render();
-    }));
-  
-    render(); // ilk çizim
-  });
-</script>
   
   
 </body>

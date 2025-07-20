@@ -5,6 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link href="style.css" rel="stylesheet" />
+    <style>
+      .badge.tag-pill{
+      border:1px solid currentColor;
+      background:transparent;
+      padding:.35em .6em;
+      border-radius:9999px;
+      font-weight:500;
+    }
+  </style> 
+    
+      
     <title>Tuna Gökgöz | CV</title>
   </head>
   <body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
@@ -156,17 +167,9 @@
         <section>
           <h3 class="text-xl font-semibold mb-4">Skills</h3>
           <div class="flex flex-wrap gap-3 text-sm">
-            <a href="projects.html?tag=docker" class="bg-blue-50 text-blue-600 px-3 py-1 rounded-full hover:bg-blue-100 transition">
-              Docker & Plugin Development
-            </a>
-            
-            <a href="projects.html?tag=aws" class="bg-blue-50 text-blue-600 px-3 py-1 rounded-full hover:bg-blue-100 transition">
-              AWS / Azure / GCP
-            </a>
-            
-            <a href="projects.html?tag=dataviz" class="bg-blue-50 text-blue-600 px-3 py-1 rounded-full hover:bg-blue-100 transition">
-              Data Visualization (SPSS)
-            </a>
+            <a class="skill-pill" data-tag="forensics">Forensics</a>
+            <a class="skill-pill" data-tag="malware">Malware</a>
+              <!-- Diğerleri… -->
           </div>
         </section>
 
@@ -195,5 +198,46 @@
         </div>
       </article>
     </main>
+    
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+      
+        /* projects.html’dekiyle aynı renk algoritması */
+        const tagColor = (tag) => {
+          let hash = 0;
+          for (let i = 0; i < tag.length; i++)
+            hash = tag.charCodeAt(i) + ((hash << 5) - hash);
+          const hue = hash % 360;
+          return {
+            text: `hsl(${hue} 60% 35%)`,
+            fill: `hsla(${hue} 70% 45% / .18)`
+          };
+        };
+      
+        /* Sitede gerçekten var olan tag’ler  */
+        const validTags = ['forensics', 'malware'];   // projects.html’deki listeyi aynen yaz
+      
+        document.querySelectorAll('.skill-pill').forEach(pill => {
+          const id = pill.dataset.tag;
+      
+          /* Geçerli tag → link + renk */
+          if (validTags.includes(id)) {
+            const { text, fill } = tagColor(id);
+            pill.href = `projects.html?tag=${id}`;
+            pill.style.color = text;
+            pill.style.backgroundColor = fill;
+          } else {
+            /* Geçersiz tag → siyah, pasif */
+            pill.style.color = '#000';
+            pill.style.cursor = 'default';
+          }
+      
+          /* Ortak rozet stili */
+          pill.classList.add('badge', 'tag-pill', 'me-1');
+        });
+      
+      });
+      </script>
+      
   </body>
 </html>
