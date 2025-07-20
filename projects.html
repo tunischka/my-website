@@ -54,9 +54,218 @@
     <!-- Sort dropdown -->
     <div class="input-group" style="max-width:220px;">
       <label class="input-group-text" for="sortSelect">Sort</label>
+      <select class="form-select" id="sortSelect">
+        <option value="az" selected>A - Z</option>
+        <option value="za">Z - A</option>
+      </select>
+    </div>
 
+    <!-- Tag buttons -->
+    <div id="tagFilters" class="d-flex flex-wrap gap-2">
+      <button class="btn btn-outline-secondary btn-sm active" data-tag="all">All</button>
+      <button class="btn btn-outline-secondary btn-sm" data-tag="forensics">Forensics</button>
+      <button class="btn btn-outline-secondary btn-sm" data-tag="malware">Malware</button>
+      <!-- yeni etiket eklemek istersen burada buton oluştur -->
+    </div>
+
+  </div>
+</section>
+
+<!-- PROJECT CARD -->
+<section class="article07" id="article07-abcd-bank">
+  <div class="container">
+    <div class="row justify-content-center">
+
+      <div class="card col-md-12 col-lg-10 shadow-lg rounded-4 overflow-hidden position-relative"
+           data-title="Angler Exploit Kit – PCAP Network Forensics Case Study"
+           data-tags="forensics,malware">
+        <div class="card-wrapper p-4 p-md-5">
+
+          <!-- stretched link -->
+          <a href="Angler-Exploit-Kit.html" class="stretched-link">
+            <span class="visually-hidden">Open Angler Exploit Kit project</span>
+          </a>
+
+          <!-- başlık -->
+          <h3 class="card-title h4 fw-bold mb-4">
+            Angler Exploit Kit – PCAP Network Forensics Case Study
+          </h3>
+
+          <!-- içerik -->
+          <div class="row card-box">
+            <div class="col-12">
+              <h4 class="h5 fw-semibold mb-2">Case Overview</h4>
+              <p class="mb-0">
+                PCAP forensics on a multi-stage Angler EK attack chain using malicious Java payloads.
+              </p>
+            </div>
+          </div><!-- /.card-box -->
+
+        </div><!-- /.card-wrapper -->
+      </div><!-- /.card -->
+
+    </div>
+  </div>
+</section>
+
+<!-- PLACEHOLDER -->
+<section class="py-5">
+  <div class="container">
+    <div class="rounded-4 border border-2 border-dashed border-secondary bg-light text-center py-5">
+      <h4 class="h5 fw-semibold text-secondary mb-2">More Projects Coming Soon</h4>
+      <p class="text-muted mb-0">Stay tuned for upcoming work.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="text-center py-4 border-top">
+  <small class="text-muted">© 2025 Tuna Gökgöz</small>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Main script -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+  /* Tag -> pastel renk üret */
+  function tagColor(tag) {
+    var hash = 0;
+    for (var i = 0; i < tag.length; i++) {
+      hash = tag.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    var hue = Math.abs(hash) % 360;
+    return {
+      text: "hsl(" + hue + " 60% 35%)",
+      fill: "hsla(" + hue + " 70% 45% / 0.18)"
+    };
+  }
+
+  /* Eleman seçiciler */
+  var cards      = Array.from(document.querySelectorAll('[data-title]'));
+  var sortSelect = document.getElementById('sortSelect');
+  var tagBtns    = Array.from(document.querySelectorAll('#tagFilters [data-tag]'));
+  var activeTag  = 'all';
+
+  /* URL parametresi varsa ilk filtre */
+  var params      = new URLSearchParams(window.location.search);
+  var initialTag  = params.get('tag');   // ?tag=forensics
+  if (initialTag) {
+    activeTag = initialTag;
+    var btnInit = tagBtns.find(function (b) { return b.dataset.tag === initialTag; });
+    if (btnInit) {
+      tagBtns.forEach(function (b) { b.classList.remove('active'); });
+      btnInit.classList.add('active');
+    }
+  }
+
+  /* Rozetleri oluştur, filtrele, sırala */
+  function render() {
+    // Etiket rozetlerini oluştur
+    cards.forEach(function (card) {
+      if (!card.querySelector('.tag-badges')) {
+        var tagBox = document.createElement('p');
+        tagBox.className = 'mt-3 tag-badges';
   
+        card.dataset.tags.split(',').forEach(function (raw) {
+          var t = raw.trim();
+          var c = tagColor(t);
+          var span = document.createElement('span');
+          span.className = 'badge tag-pill me-1';
+          span.style.color = c.text;
+          span.style.backgroundColor = c.fill;
+          span.textContent = t.charAt(0).toUpperCase() + t.slice(1);
+          tagBox.appendChild(span);
+        });
   
+        card.querySelector('.card-box').appendChild(tagBox);
+      }
+    });
+  
+    // Filtrele
+    var visible = cards.filter(function (c) {
+      var tagArr = c.dataset.tags
+                     .split(',')
+                     .map(function(t){ return t.trim().toLowerCase(); })
+                     .filter(Boolean);
+      return activeTag === 'all' || tagArr.includes(activeTag);
+    });
+  
+    // Sırala
+    visible.sort(function (a, b) {
+      if (sortSelect.value === 'az') {
+        return a.dataset.title.localeCompare(b.dataset.title);
+      } else {
+        return b.dataset.title.localeCompare(a.dataset.title);
+      }
+    });
+  
+    // DOM güncelle
+    var parent = cards[0].parentNode;
+    visible.forEach(function (card) { parent.appendChild(card); });
+    cards.forEach(function (card) {
+      card.style.display = visible.includes(card) ? '' : 'none';
+    });
+  }
+  
+
+  /* İlk çizim */
+  render();
+});
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+  
+    // projects.html içindeki tag butonlarından listeyi al
+    fetch('projects.html')
+      .then(res => res.text())
+      .then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+  
+        // tag button'larını seç
+        const tagBtns = doc.querySelectorAll('#tagFilters [data-tag]');
+        const validTags = Array.from(tagBtns).map(btn => btn.dataset.tag);
+  
+        // renk üretme fonksiyonu (aynısı)
+        const tagColor = (tag) => {
+          let hash = 0;
+          for (let i = 0; i < tag.length; i++) {
+            hash = tag.charCodeAt(i) + ((hash << 5) - hash);
+          }
+          const hue = Math.abs(hash) % 360;
+          return {
+            text: `hsl(${hue} 60% 35%)`,
+            fill: `hsla(${hue} 70% 45% / .18)`
+          };
+        };
+  
+        // tüm skill-pill'leri işle
+        document.querySelectorAll('.skill-pill').forEach(pill => {
+          const id = pill.dataset.tag;
+  
+          if (validTags.includes(id)) {
+            const { text, fill } = tagColor(id);
+            pill.href = `projects.html?tag=${id}`;
+            pill.style.color = text;
+            pill.style.backgroundColor = fill;
+          } else {
+            pill.style.color = '#000';
+            pill.style.cursor = 'default';
+          }
+  
+          pill.classList.add('badge', 'tag-pill', 'me-1');
+        });
+      })
+      .catch(err => {
+        console.error('Tag çekilemedi:', err);
+      });
+  });
+  </script>
   
 </body>
 </html>
+
+  })
