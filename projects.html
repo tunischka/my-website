@@ -96,78 +96,86 @@
 <script type="module">
   import { TAGS, colourOfIndex } from './assets/tags.js';
 
-  /* Build filter buttons */
+  // 1) Filtre butonlarını oluştur
   const bar = document.getElementById('tagFilters');
-  const allBtn = document.createElement('button');
-  allBtn.className = 'btn btn-secondary btn-sm active';
-  allBtn.dataset.tag = 'all';
-  allBtn.textContent = 'All';
-  bar.appendChild(allBtn);
-
-  TAGS.forEach(t => {
+  ['all', ...TAGS.map(t => t.id)].forEach((tag, i) => {
     const btn = document.createElement('button');
-    btn.className = 'btn btn-outline-secondary btn-sm';
-    btn.dataset.tag = t.id;
-    btn.textContent = t.label;
+    btn.className = i === 0
+      ? 'btn btn-secondary btn-sm active'
+      : 'btn btn-outline-secondary btn-sm';
+    btn.dataset.tag = tag;
+    btn.textContent = tag === 'all'
+      ? 'All'
+      : TAGS.find(t => t.id === tag).label;
     bar.appendChild(btn);
   });
 
-  /* Card collection */
-  const cards = Array.from(document.querySelectorAll('[data-title]'));
-  let activeTag = 'all';
+  // 2) Kartları topla
+  const grid  = document.getElementById('projectGrid');
+  const cards = Array.from(grid.querySelectorAll('.card'));
+  let activeTag = new URLSearchParams(window.location.search).get('tag') || 'all';
 
-  const urlParam = new URLSearchParams(window.location.search).get('tag');
-  if (urlParam && TAGS.some(t => t.id === urlParam)) {
-    activeTag = urlParam;
-    [...bar.children].forEach(b => {
-      b.classList.toggle('active', b.dataset.tag === activeTag);
-    });
+  // URL'den gelen tag geçerliyse o butonu seçili yap
+  if (activeTag !== 'all') {
+    bar.querySelectorAll('button').forEach(b =>
+      b.classList.toggle('active', b.dataset.tag === activeTag)
+    );
   }
 
+  // 3) Rozet ekleme + filtreleme
   function addBadges(card) {
     if (card.querySelector('.tag-badges')) return;
-    const holder = document.createElement('p');
-    holder.className = 'tag-badges mt-2';
-    card.dataset.tags.split(',').forEach(raw => {
-      const id = raw.trim();
+    const wrapper = document.createElement('p');
+    wrapper.className = 'mt-3 tag-badges';
+    card.dataset.tags.split(',').map(t => t.trim()).forEach(id => {
       const idx = TAGS.findIndex(t => t.id === id);
-      const col = colourOfIndex(idx);
+      const { text, fill } = colourOfIndex(idx);
       const span = document.createElement('span');
       span.className = 'badge tag-pill me-1';
-      span.style.color = col.text;
-      span.style.background = col.fill;
-      span.textContent = TAGS.find(x => x.id === id)?.label || id;
-      holder.appendChild(span);
+      span.style.color = text;
+      span.style.background = fill;
+      span.textContent = TAGS[idx].label;
+      wrapper.appendChild(span);
     });
-    card.appendChild(holder);
+    card.appendChild(wrapper);
   }
 
   function render() {
     cards.forEach(addBadges);
     cards.forEach(card => {
-      const tagList = card.dataset.tags.split(',').map(s => s.trim());
-      card.parentElement.classList.toggle('d-none', activeTag !== 'all' && !tagList.includes(activeTag));
+      const tags = card.dataset.tags.split(',').map(t => t.trim());
+      card.parentElement.style.display =
+        activeTag === 'all' || tags.includes(activeTag)
+          ? ''
+          : 'none';
     });
   }
 
+  // 4) Buton click handler
   bar.addEventListener('click', e => {
     if (!e.target.dataset.tag) return;
     activeTag = e.target.dataset.tag;
-    [...bar.children].forEach(b => b.classList.toggle('active', b === e.target));
+    bar.querySelectorAll('button').forEach(b =>
+      b.classList.toggle('active', b === e.target)
+    );
     render();
   });
 
+  // 5) Sıralama dropdown’u
   document.getElementById('sortSelect').addEventListener('change', e => {
-    const grid = document.getElementById('projectGrid');
-    const sorted = [...grid.children].sort((a, b) => {
-      const aTitle = a.querySelector('[data-title]').dataset.title;
-      const bTitle = b.querySelector('[data-title]').dataset.title;
-      return e.target.value === 'az' ? aTitle.localeCompare(bTitle) : bTitle.localeCompare(aTitle);
+    const asc = e.target.value === 'az';
+    const sorted = cards.slice().sort((a, b) => {
+      const aT = a.dataset.title.toLowerCase();
+      const bT = b.dataset.title.toLowerCase();
+      return asc ? aT.localeCompare(bT) : bT.localeCompare(aT);
     });
-    sorted.forEach(el => grid.appendChild(el));
+    sorted.forEach(c => grid.appendChild(c.parentElement));
+    render();
   });
 
+  // İlk render
   render();
 </script>
+
 </body>
 </html>

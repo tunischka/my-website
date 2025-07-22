@@ -200,20 +200,20 @@
     <!-- Tag & pill linkage -->
     <script type="module">
       import { TAGS, colourOfIndex } from './assets/tags.js';
-      const valid = new Set(TAGS.map(t=>t.id));
+      const valid = new Set(TAGS.map(t => t.id));
 
-      document.querySelectorAll('.skill-pill').forEach(pill=>{
+      document.querySelectorAll('.skill-pill').forEach(pill => {
         const id = pill.dataset.tag.trim().toLowerCase();
-        pill.classList.add('badge','tag-pill','me-1');
-        if(valid.has(id)){
+        pill.classList.add('badge', 'tag-pill', 'me-1');
+        if (valid.has(id)) {
           const idx = TAGS.findIndex(t => t.id === id);
           const { text, fill } = colourOfIndex(idx);
-          pill.style.color=text;
-          pill.style.background=fill;
+          pill.style.color = text;
+          pill.style.background = fill;
           pill.href = `projects.html?tag=${id}`;
         } else {
-          pill.style.color='#000';
-          pill.style.cursor='default';
+          pill.style.color = '#000';
+          pill.style.cursor = 'default';
         }
       });
     </script>
