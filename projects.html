@@ -1,33 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!--  Mobirise v5 çekirdekleri  -->
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-
   <title>Tuna | Projects</title>
 
-  <!-- ikonlar, bootstrap, tema -->
+  <!-- Bootstrap + Mobirise theme -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mobirise-icons@2.0.0/mobirise2.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mobirise/mobirise5@main/m5-theme/css/style.css">
-
-  <!-- kendi ek CSS -->
   <link rel="stylesheet" href="style.css">
 
-  <!-- badge / pill görünümü -->
   <style>
-    .badge.tag-pill {
-      border: 1px solid currentColor;
-      background-color: transparent;
-      padding: .35em .6em;
-      font-weight: 500;
-      border-radius: 9999px;
-    }
+    /* Shared pill style (colour comes from JS) */
+    .badge.tag-pill{border:1px solid currentColor;border-radius:9999px;padding:.35em .6em;font-weight:500;background:transparent}
   </style>
 </head>
-
 <body>
 
 <!-- Navbar -->
@@ -40,18 +29,15 @@
   </ul>
 </nav>
 
-<!-- SECTION TITLE -->
 <section class="py-5 text-center">
   <div class="container">
     <h2 class="display-5 fw-bold">My Projects</h2>
   </div>
 </section>
 
-<!-- FILTER & SORT CONTROLS -->
+<!-- Filter bar (buttons injected by JS) -->
 <section class="py-3">
   <div class="container d-flex flex-wrap align-items-center gap-3">
-
-    <!-- Sort dropdown -->
     <div class="input-group" style="max-width:220px;">
       <label class="input-group-text" for="sortSelect">Sort</label>
       <select class="form-select" id="sortSelect">
@@ -60,92 +46,39 @@
       </select>
     </div>
 
-    <!-- Tag buttons -->
-    <div id="tagFilters" class="d-flex flex-wrap gap-2">
-      <button class="btn btn-outline-secondary btn-sm active" data-tag="all">All</button>
-      <button class="btn btn-outline-secondary btn-sm" data-tag="forensics">Forensics</button>
-      <button class="btn btn-outline-secondary btn-sm" data-tag="malware">Malware</button>
-      <!-- yeni etiket eklemek istersen burada buton oluştur -->
-    </div>
-
+    <div id="tagFilters" class="d-flex flex-wrap gap-2"></div>
   </div>
 </section>
 
-<!-- PROJECT CARD -->
-<section class="article07 my-5" id="article07-abcd-bank">
+<!-- Project cards -->
+<section class="article07 my-5">
   <div class="container">
-    <div class="row justify-content-center">
+    <div class="row g-4" id="projectGrid">
 
-      <div class="card col-md-12 col-lg-10 shadow-lg rounded-4 overflow-hidden position-relative"
-           data-title="Angler Exploit Kit – PCAP Network Forensics Case Study"
-           data-tags="forensics,malware">
-        <div class="card-wrapper p-4 p-md-5">
+      <div class="col-12">
+        <div class="card shadow-lg rounded-4 overflow-hidden p-4 position-relative"
+             data-title="Angler Exploit Kit – PCAP Network Forensics Case Study"
+             data-tags="forensics,malware">
+          <a href="Angler-Exploit-Kit.html" class="stretched-link"><span class="visually-hidden">Open Angler Exploit Kit project</span></a>
+          <h3 class="h5 fw-bold mb-2">Angler Exploit Kit – PCAP Network Forensics Case Study</h3>
+          <p class="mb-2">PCAP forensics on a multi-stage Angler EK attack chain using malicious Java payloads.</p>
+        </div>
+      </div>
 
-          <!-- stretched link -->
-          <a href="Angler-Exploit-Kit.html" class="stretched-link">
-            <span class="visually-hidden">Open Angler Exploit Kit project</span>
-          </a>
-
-          <!-- başlık -->
-          <h3 class="card-title h4 fw-bold mb-4">
-            Angler Exploit Kit – PCAP Network Forensics Case Study
-          </h3>
-
-          <!-- içerik -->
-          <div class="row card-box">
-            <div class="col-12">
-              <h4 class="h5 fw-semibold mb-2">Case Overview</h4>
-              <p class="mb-0">
-                PCAP forensics on a multi-stage Angler EK attack chain using malicious Java payloads.
-              </p>
-            </div>
-          </div><!-- /.card-box -->
-
-        </div><!-- /.card-wrapper -->
-      </div><!-- /.card -->
+      <div class="col-12">
+        <div class="card shadow-lg rounded-4 overflow-hidden p-4 position-relative"
+             data-title="Vulnversity – TryHackMe CTF Walkthrough"
+             data-tags="ctf,web-exploitation">
+          <a href="vulnversity.html" class="stretched-link"><span class="visually-hidden">Open Vulnversity project</span></a>
+          <h3 class="h5 fw-bold mb-2">Vulnversity – TryHackMe CTF Walkthrough</h3>
+          <p class="mb-2">This write-up covers my walkthrough of the Vulnversity CTF room on TryHackMe, aimed at building foundational skills in web exploitation</p>
+        </div>
+      </div>
 
     </div>
   </div>
 </section>
 
-<!-- PROJECT CARD -->
-<section class="article07 my-5" id="article07-abcd-bank">
-  <div class="container">
-    <div class="row justify-content-center">
-
-      <div class="card col-md-12 col-lg-10 shadow-lg rounded-4 overflow-hidden position-relative"
-           data-title="Vulnversity – TryHackMe CTF Walkthrough"
-           data-tags="Web-Exploitation">
-        <div class="card-wrapper p-4 p-md-5">
-
-          <!-- stretched link -->
-          <a href="vulnversity.html" class="stretched-link">
-            <span class="visually-hidden">Open Angler Exploit Kit project</span>
-          </a>
-
-          <!-- başlık -->
-          <h3 class="card-title h4 fw-bold mb-4">
-            Vulnversity – TryHackMe CTF Walkthrough
-          </h3>
-
-          <!-- içerik -->
-          <div class="row card-box">
-            <div class="col-12">
-              <h4 class="h5 fw-semibold mb-2">Case Overview</h4>
-              <p class="mb-0">
-                This write-up covers my walkthrough of the Vulnversity CTF room on TryHackMe, aimed at building foundational skills in web exploitation
-              </p>
-            </div>
-          </div><!-- /.card-box -->
-
-        </div><!-- /.card-wrapper -->
-      </div><!-- /.card -->
-
-    </div>
-  </div>
-</section>
-
-<!-- PLACEHOLDER -->
 <section class="py-5">
   <div class="container">
     <div class="rounded-4 border border-2 border-dashed border-secondary bg-light text-center py-5">
@@ -155,154 +88,85 @@
   </div>
 </section>
 
-<!-- FOOTER -->
-<footer class="text-center py-4 border-top">
-  <small class="text-muted">© 2025 Tuna Gökgöz</small>
-</footer>
+<footer class="text-center py-4 border-top"><small class="text-muted">© 2025 Tuna Gökgöz</small></footer>
 
-<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Main script -->
-<script>
-document.addEventListener('DOMContentLoaded', function () {
+<!-- ========= Tag & Filter Logic ========= -->
+<script type="module">
+  import { TAGS, colourOf } from './assets/tags.js';
 
-  /* Tag -> pastel renk üret */
-  function tagColor(tag) {
-    var hash = 0;
-    for (var i = 0; i < tag.length; i++) {
-      hash = tag.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    var hue = Math.abs(hash) % 360;
-    return {
-      text: "hsl(" + hue + " 60% 35%)",
-      fill: "hsla(" + hue + " 70% 45% / 0.18)"
-    };
-  }
+  /* Build filter buttons */
+  const bar = document.getElementById('tagFilters');
+  const allBtn = document.createElement('button');
+  allBtn.className = 'btn btn-secondary btn-sm active';
+  allBtn.dataset.tag = 'all';
+  allBtn.textContent = 'All';
+  bar.appendChild(allBtn);
 
-  /* Eleman seçiciler */
-  var cards      = Array.from(document.querySelectorAll('[data-title]'));
-  var sortSelect = document.getElementById('sortSelect');
-  var tagBtns    = Array.from(document.querySelectorAll('#tagFilters [data-tag]'));
-  var activeTag  = 'all';
-
-  /* URL parametresi varsa ilk filtre */
-  var params      = new URLSearchParams(window.location.search);
-  var initialTag  = params.get('tag');   // ?tag=forensics
-  if (initialTag) {
-    activeTag = initialTag;
-    var btnInit = tagBtns.find(function (b) { return b.dataset.tag === initialTag; });
-    if (btnInit) {
-      tagBtns.forEach(function (b) { b.classList.remove('active'); });
-      btnInit.classList.add('active');
-    }
-  }
-
-  /* Rozetleri oluştur, filtrele, sırala */
-  function render() {
-    // Etiket rozetlerini oluştur
-    cards.forEach(function (card) {
-      if (!card.querySelector('.tag-badges')) {
-        var tagBox = document.createElement('p');
-        tagBox.className = 'mt-3 tag-badges';
-  
-        card.dataset.tags.split(',').forEach(function (raw) {
-          var t = raw.trim();
-          var c = tagColor(t);
-          var span = document.createElement('span');
-          span.className = 'badge tag-pill me-1';
-          span.style.color = c.text;
-          span.style.backgroundColor = c.fill;
-          span.textContent = t.charAt(0).toUpperCase() + t.slice(1);
-          tagBox.appendChild(span);
-        });
-  
-        card.querySelector('.card-box').appendChild(tagBox);
-      }
-    });
-  
-    // Filtrele
-    var visible = cards.filter(function (c) {
-      var tagArr = c.dataset.tags
-                     .split(',')
-                     .map(function(t){ return t.trim().toLowerCase(); })
-                     .filter(Boolean);
-      return activeTag === 'all' || tagArr.includes(activeTag);
-    });
-  
-    // Sırala
-    visible.sort(function (a, b) {
-      if (sortSelect.value === 'az') {
-        return a.dataset.title.localeCompare(b.dataset.title);
-      } else {
-        return b.dataset.title.localeCompare(a.dataset.title);
-      }
-    });
-  
-    // DOM güncelle
-    var parent = cards[0].parentNode;
-    visible.forEach(function (card) { parent.appendChild(card); });
-    cards.forEach(function (card) {
-      card.style.display = visible.includes(card) ? '' : 'none';
-    });
-  }
-  
-
-  /* İlk çizim */
-  render();
-});
-</script>
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-  
-    // projects.html içindeki tag butonlarından listeyi al
-    fetch('projects.html')
-      .then(res => res.text())
-      .then(html => {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-  
-        // tag button'larını seç
-        const tagBtns = doc.querySelectorAll('#tagFilters [data-tag]');
-        const validTags = Array.from(tagBtns).map(btn => btn.dataset.tag);
-  
-        // renk üretme fonksiyonu (aynısı)
-        const tagColor = (tag) => {
-          let hash = 0;
-          for (let i = 0; i < tag.length; i++) {
-            hash = tag.charCodeAt(i) + ((hash << 5) - hash);
-          }
-          const hue = Math.abs(hash) % 360;
-          return {
-            text: `hsl(${hue} 60% 35%)`,
-            fill: `hsla(${hue} 70% 45% / .18)`
-          };
-        };
-  
-        // tüm skill-pill'leri işle
-        document.querySelectorAll('.skill-pill').forEach(pill => {
-          const id = pill.dataset.tag;
-  
-          if (validTags.includes(id)) {
-            const { text, fill } = tagColor(id);
-            pill.href = `projects.html?tag=${id}`;
-            pill.style.color = text;
-            pill.style.backgroundColor = fill;
-          } else {
-            pill.style.color = '#000';
-            pill.style.cursor = 'default';
-          }
-  
-          pill.classList.add('badge', 'tag-pill', 'me-1');
-        });
-      })
-      .catch(err => {
-        console.error('Tag çekilemedi:', err);
-      });
+  TAGS.forEach(t => {
+    const btn = document.createElement('button');
+    btn.className = 'btn btn-outline-secondary btn-sm';
+    btn.dataset.tag = t.id;
+    btn.textContent = t.label;
+    bar.appendChild(btn);
   });
-  </script>
-  
+
+  /* Card collection */
+  const cards = Array.from(document.querySelectorAll('[data-title]'));
+  let activeTag = 'all';
+
+  const urlParam = new URLSearchParams(window.location.search).get('tag');
+  if (urlParam && TAGS.some(t => t.id === urlParam)) {
+    activeTag = urlParam;
+    [...bar.children].forEach(b => {
+      b.classList.toggle('active', b.dataset.tag === activeTag);
+    });
+  }
+
+  function addBadges(card) {
+    if (card.querySelector('.tag-badges')) return;
+    const holder = document.createElement('p');
+    holder.className = 'tag-badges mt-2';
+    card.dataset.tags.split(',').forEach(raw => {
+      const id = raw.trim();
+      const col = colourOf(id);
+      const span = document.createElement('span');
+      span.className = 'badge tag-pill me-1';
+      span.style.color = col.text;
+      span.style.background = col.fill;
+      span.textContent = TAGS.find(x => x.id === id)?.label || id;
+      holder.appendChild(span);
+    });
+    card.appendChild(holder);
+  }
+
+  function render() {
+    cards.forEach(addBadges);
+    cards.forEach(card => {
+      const tagList = card.dataset.tags.split(',').map(s => s.trim());
+      card.parentElement.classList.toggle('d-none', activeTag !== 'all' && !tagList.includes(activeTag));
+    });
+  }
+
+  bar.addEventListener('click', e => {
+    if (!e.target.dataset.tag) return;
+    activeTag = e.target.dataset.tag;
+    [...bar.children].forEach(b => b.classList.toggle('active', b === e.target));
+    render();
+  });
+
+  document.getElementById('sortSelect').addEventListener('change', e => {
+    const grid = document.getElementById('projectGrid');
+    const sorted = [...grid.children].sort((a, b) => {
+      const aTitle = a.querySelector('[data-title]').dataset.title;
+      const bTitle = b.querySelector('[data-title]').dataset.title;
+      return e.target.value === 'az' ? aTitle.localeCompare(bTitle) : bTitle.localeCompare(aTitle);
+    });
+    sorted.forEach(el => grid.appendChild(el));
+  });
+
+  render();
+</script>
 </body>
 </html>
-
-  })
