@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link href="style.css" rel="stylesheet" />
+  <link href="../style.css" rel="stylesheet" />
   <!-- Highlight.js GitHub theme -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" integrity="sha512-BiQWMqhH+asly72mVHYhlv80EJVf76wrWDnXvJYtmM0QIScI7UILcq/TPWkqB6XSMWUTy7oQZgpE1PV6b8PQVA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <title>🛡️ Vulnversity – TryHackMe Walkthrough</title>
@@ -18,9 +18,9 @@
   <nav class="bg-white shadow p-4 flex justify-between items-center">
     <h1 class="text-xl font-bold">Tuna</h1>
     <ul class="flex gap-4">
-      <li><a href="index.html" class="hover:text-blue-500">Home</a></li>
-      <li><a href="cv.html" class="hover:text-blue-500">CV</a></li>
-      <li><a href="projects.html" class="hover:text-blue-500">Projects</a></li>
+      <li><a href="../index.html" class="hover:text-blue-500">Home</a></li>
+      <li><a href="../cv.html" class="hover:text-blue-500">CV</a></li>
+      <li><a href="../projects.html" class="hover:text-blue-500">Projects</a></li>
     </ul>
   </nav>
 
@@ -39,7 +39,7 @@
       <!-- 1. Nmap -->
       <section id="nmap" class="space-y-4">
         <h3 class="text-2xl font-semibold">1️⃣ Nmap – Initial Enumeration</h3>
-        <img src="assets/images/replace_nmap.png" alt="Nmap scan results" class="rounded shadow w-full" />
+        <img src="../assets/images/replace_nmap.png" alt="Nmap scan results" class="rounded shadow w-full" />
         <p class="text-gray-700">
           Once you've deployed the target machine, you're ready to begin. Naturally, the first step is running an Nmap scan.
           While many CTF rooms tend to skip over this part or assume you already know it, I really appreciated that this one actually emphasizes it.
@@ -51,7 +51,7 @@
       <!-- 2. Gobuster -->
       <section id="gobuster" class="space-y-4">
         <h3 class="text-2xl font-semibold">2️⃣ Gobuster – Web Content Discovery</h3>
-        <img src="assets/images/replace_gobuster.png" alt="Gobuster results" class="rounded shadow w-full" />
+        <img src="../assets/images/replace_gobuster.png" alt="Gobuster results" class="rounded shadow w-full" />
         <p class="text-gray-700">
           The next step is directory enumeration using Gobuster. Since this is a web exploitation room, we obviously need a directory we can actually exploit.😆
           We take the IP address of the target machine and combine it with the web server port we discovered during the Nmap scan to launch a brute-force attack on potential directories.
@@ -63,7 +63,7 @@
       <!-- 3. Burp -->
       <section id="burp" class="space-y-4">
         <h3 class="text-2xl font-semibold">3️⃣ BurpSuite – File‑Upload Bypass</h3>
-        <img src="assets/images/replace_burp.png" alt="BurpSuite Intruder fuzz" class="rounded shadow w-full" />
+        <img src="../assets/images/replace_burp.png" alt="BurpSuite Intruder fuzz" class="rounded shadow w-full" />
         <p class="text-gray-700">
           Now that we’ve identified the target directory, it’s time to bring everything together and navigate to the address. Once loaded, we’re greeted with a file upload page—and that’s where things start to get interesting.
           Using Burp Suite, we perform a brute-force attack to enumerate which file extensions are allowed.
@@ -74,7 +74,7 @@
       <!-- 4. Reverse Shell -->
       <section id="reverse-shell" class="space-y-4">
         <h3 class="text-2xl font-semibold">4️⃣ Reverse Shell – www‑data Access</h3>
-        <img src="assets/images/replace_shell.png" alt="Reverse shell screenshot" class="rounded shadow w-full" />
+        <img src="../assets/images/replace_shell.png" alt="Reverse shell screenshot" class="rounded shadow w-full" />
         <p class="text-gray-700">
           With the allowed extensions now discovered, the next step is gaining access via a reverse shell.
           This is where things start to get a bit more advanced.
@@ -93,7 +93,7 @@ http://10.10.X.X:3333/internal/uploads/php-reverse-shell.phtml</code></pre>
       <!-- 5. PrivEsc -->
       <section id="privesc" class="space-y-4">
         <h3 class="text-2xl font-semibold">5️⃣ Privilege Escalation – Root via SUID systemctl</h3>
-        <img src="assets/images/replace_privesc.png" alt="Privilege escalation screenshot" class="rounded shadow w-full" />
+        <img src="../assets/images/replace_privesc.png" alt="Privilege escalation screenshot" class="rounded shadow w-full" />
         <p class="text-gray-700">
           And now… the finale. We’ve snuck into the castle—but there’s a catch. The identity we assumed is that of a lowly peasant. Our mission? Take the throne. Become root.
           Here's how we pulled it off: A SUID bit set on /bin/systemctl gave us the ability to create and launch our own malicious service as root. Using that, we dropped a root-owned SUID bash binary into /tmp:
