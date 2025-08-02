@@ -1,0 +1,144 @@
+!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="../style.css" rel="stylesheet" />
+  <!-- Highlight.js GitHub theme -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" integrity="sha512-BiQWMqhH+asly72mVHYhlv80EJVf76wrWDnXvJYtmM0QIScI7UILcq/TPWkqB6XSMWUTy7oQZgpE1PV6b8PQVA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <title> Wonderland – TryHackMe Walkthrough</title>
+  <style>
+    pre{margin-bottom:1.5rem;border-radius:.5rem;overflow-x:auto;background:#f6f8fa;padding:1rem}
+    pre code{font-family:SFMono-Regular,Menlo,Consolas,"Courier New",monospace;font-size:.9rem;line-height:1.4}
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
+  <!-- Navbar -->
+  <nav class="bg-white shadow p-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold">Tuna</h1>
+    <ul class="flex gap-4">
+      <li><a href="../index.html" class="hover:text-blue-500">Home</a></li>
+      <li><a href="../cv.html" class="hover:text-blue-500">CV</a></li>
+      <li><a href="../projects.html" class="hover:text-blue-500">Projects</a></li>
+    </ul>
+  </nav>
+
+  <main class="flex-grow flex justify-center px-4 py-10">
+    <article class="w-full max-w-4xl bg-white shadow-lg rounded-2xl p-8 space-y-10">
+      <!-- Header -->
+      <header class="space-y-4">
+        <h2 class="text-3xl font-bold text-gray-900"> Wonderland – TryHackMe CTF Walkthrough</h2>
+        <p class="text-gray-700 leading-relaxed">This CTF room takes you down the rabbit hole — literally. Inspired by Alice in Wonderland, it’s a whimsical blend of puzzles, enumeration, privilege escalation, and unexpected surprises hiding behind every corner. This CTF challenge took my 2.5 hours but thanks to this Walkthrough it will take less for you guys.
+        </p>
+        <p class="text-sm text-gray-500"><strong>⚠️ Disclaimer:</strong> SPOILER ALERT!</p>
+      </header>
+
+      <!-- 1. Nmap -->
+      <section id="nmap" class="space-y-4">
+        <h3 class="text-2xl font-semibold">1️⃣ Nmap Scan – Initial Enumeration</h3>
+        <img src="../assets/images/wonderland_nmap.png" alt="Nmap scan results" class="rounded shadow w-full" />
+        <p class="text-gray-700">
+            The first step in the Wonderland CTF was to run an Nmap scan against the target machine. Using nmap -sV, we discovered that ports 22 (SSH) and 80 (HTTP) were open. This suggested that we could expect an SSH login opportunity later and that the HTTP service might reveal something interesting upon inspection.
+        </p>
+<pre><code class="language-bash">nmap -sV 10.10.X.X -oN</code></pre>
+      </section>
+
+      <!-- 2. Dirb -->
+      <section id="gobuster" class="space-y-4">
+        <h3 class="text-2xl font-semibold">2️⃣ Gobuster – Web Content Discovery</h3>
+        <img src="../assets/images/wonderland_dirb_1" alt="Dirb results" class="rounded shadow w-full" />
+        <img src="../assets/images/wonderland_dirb_2" alt="Dirb results" class="rounded shadow w-full" />
+        <p class="text-gray-700">
+            Once we identified that port 80 was open, we navigated to the website and began a typical web enumeration phase. Using dirb, we brute-forced directory paths and successfully discovered a hidden folder: /r. This directory contained what appeared to be an ordinary image file.
+            While our initial progress came from brute-forcing (no stego magic needed), this is also where steganography could have been applied.
+<pre><code class="language-bash">dirb http://10.10.53.217:80/r/a</code></pre>
+      </section>
+
+        <!-- Bonus: Steganography Attempt (/img Directory)-->
+      <section id="gobuster" class="space-y-4">
+        <h3 class="text-2xl font-semibold"> ➕ Bonus: Steganography Attempt (/img Directory)</h3>
+        <img src="../assets/images/wonderland_steogra" alt="Dirb results" class="rounded shadow w-full" />
+        <p class="text-gray-700">
+            Though not essential for solving the room, we explored steganography just in case. We found white_rabbit_1.jpg inside the /img directory and analyzed it using tools like exiftool, strings, steghide, zsteg, and binwalk.
+            These efforts helped us practice identifying hidden data inside image files — a valuable skill in many CTFs. While the real password was ultimately guessed and brute-forced via directory enumeration, this optional exploration served as a good example of thinking outside the box when needed.
+      </section>
+
+      <!-- 3. r/a/b/b/i/t and SSH Connection -->
+      <section id="burp" class="space-y-4">
+        <h3 class="text-2xl font-semibold">3️⃣ 3. r/a/b/b/i/t and SSH Connection</h3>
+        <img src="../assets/images/wonderland_ssh_password.png" alt="BurpSuite Intruder fuzz" class="rounded shadow w-full" />
+        <p class="text-gray-700">
+            Inside the r/a/b/b/i/t directory, we checked the page source and spotted something interesting: a reference to alice. It wasn’t super obvious, but enough to raise an eyebrow.
+            That little hint made us wonder — could alice be a real user on the system? We took a chance and tried connecting over SSH as alice.
+            
+        </p>
+      </section>
+
+      <!-- SSH Alice Privilege Escalation -->
+      <section id="reverse-shell" class="space-y-4">
+        <h3 class="text-2xl font-semibold">4️⃣ SSH Alice Privilege Escalation</h3>
+        <img src="../assets/images/wonderland_alice_1.png" alt="privesc" class="rounded shadow w-full" />
+        <p class="text-gray-700">
+            Once inside as Alice, we found ourselves in her home directory. Two files stood out: root.txt (of course, permission denied 🙃) and a suspicious Python file named walrus_and_the_carpenter.py.
+            Being the curious pentesters we are, we peeked into its permissions and discovered that Alice was allowed to run it as Rabbit using sudo. 🎩 That’s a big win.
+            
+            To test our theory, we created a quick Python script that simply spawns a bash shell:wonderland_alice_2.png
+        </p>
+        <img src="../assets/images/wonderland_alice_2.png" alt="Reverse shell screenshot" class="rounded shadow w-full" />
+
+      </section>
+
+      <!-- 5. PrivEsc -->
+      <section id="privesc" class="space-y-4">
+        <h3 class="text-2xl font-semibold">5️⃣ SSH Rabbit Privilege Escalation</h3>
+        <img src="../assets/images/Wonderland_rabbit_1.png" alt="Privilege escalation screenshot" class="rounded shadow w-full" />
+        <p class="text-gray-700">
+            After becoming the user rabbit, we took a look around and immediately spotted something odd in their home directory—a suspiciously named binary: teaParty. The name alone sounded like it held secrets, and the file permissions confirmed it: the binary had the SUID bit set, meaning it could potentially run with elevated (root) privileges. 👀On execution, it simply said:
+
+            "Welcome to the tea party!
+            The Mad Hatter will be here soon..."
+
+        </p>
+        <img src="../assets/images/Wonderland_rabbit_2.png" alt="Privilege escalation screenshot" class="rounded shadow w-full" />
+        <p class="text-gray-700 mt-4">Wait, what? Hatter? Sounds like some sort of callback to earlier users. 🤔 That gave us a hunch: maybe the binary calls external programs—and if so, we could hijack one of them.
+            To test this, we created a malicious script in /tmp named date (a common Linux command), filled it with a simple #!/bin/bash reverse shell, made it executable, and then manipulated our $PATH to prioritize /tmp.
+        </p>
+
+        <img src="../assets/images/Wonderland_rabbit_3.png" alt="Privilege escalation screenshot" class="rounded shadow w-full" />
+        <Then class="text-gray-700 mt-4" > Then we ran ./teaParty again… and boom. 💥 Root shell.
+        We weren’t just at the tea party anymore—we were hosting it. 🎉
+        From here, it was just a matter of cat /root/root.txt, and the final flag was ours.
+        </p>
+      </section>
+      
+      
+      <!-- 6. PrivEsc -->
+      <section id="privesc" class="space-y-4">
+        <h3 class="text-2xl font-semibold">6️⃣ SSH Hatter and Flags</h3>
+        <img src="../assets/images/Wonderland_hatter_1.png" alt="Privilege escalation screenshot" class="rounded shadow w-full" />
+        <p class="text-gray-700">
+            Once inside Hatter’s home directory, we found a single file: password.txt. Opening it revealed another curious phrase: WhyIsARavenLikeAWritingDesk? — likely password for hatter (or just a philosophical crisis). 🐦📝
+
+        </p>
+        <img src="../assets/images/Wonderland_hatter_2.png" alt="Privilege escalation screenshot" class="rounded shadow w-full" />
+        <p class="text-gray-700 mt-4">We now had access to much more of the system — but not everything. Attempts to list or access the /root directory or alice's root.txt were denied. Still, one flag — user.txt — was readable and gave us:
+            thm{Curiouser and curiouser!} 💡
+            
+        </p>
+        <img src="../assets/images/Wonderland_hatter_3.png" alt="Privilege escalation screenshot" class="rounded shadow w-full" />
+        <Then class="text-gray-700 mt-4" > Just when it seemed like we were stuck as Hatter — no sudo rights, no access to Alice’s or root’s secret flags — we stumbled upon a hidden ace up our sleeve: Perl. 🎭
+            Turns out the system allowed us to execute /usr/bin/perl with elevated privileges. Using a simple one-liner that leveraged Perl’s POSIX module, we invoked setuid(0) and launched a root shell. Just like that, we were root. 👑
+            
+            No rabbits, no riddles — just pure SUID magic and a dash of scripting wizardry. With root access in hand, we finally read the second flag in Alice’s home:
+            thm{Twinkle, twinkle, little bat! How I wonder what you're at!}
+        </p>
+      </section>
+
+
+
+    </article>
+  </main>
+
+  <!-- Highlight.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-I5fHnn9SxkFpHVeq2xkA7C4c3AlEeakBSQE0x3EJOiq0kileBg/jYvNvA/KCQURkWv68mpz2qc

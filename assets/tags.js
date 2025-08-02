@@ -2,7 +2,8 @@ export const TAGS = [
   { id: 'forensics',        label: 'Forensics' },
   { id: 'malware',          label: 'Malware' },
   { id: 'ctf',              label: 'CTF' },
-  { id: 'web-exploitation', label: 'Web-Exploitation' }
+  { id: 'web-exploitation', label: 'Web-Exploitation' },
+  { id: 'priv-escalation', label: 'Privilege-Escalation' }
 ];
 
 // Golden Angle renk dağıtımı
