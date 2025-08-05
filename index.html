@@ -20,6 +20,7 @@
         font-size: 16rem;
         background: linear-gradient(270deg, #FFC1CC, #B3E5FC, #FFDAB9);
         background-size: 600% 600%;
+        background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         animation: gradientShift 8s ease infinite;
@@ -40,6 +41,28 @@
         font-weight: 500;
         background: transparent;
       }
+      .tns-controls {
+      position: absolute;
+      width: 100%;
+      bottom: -2rem;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 1;
+    }
+    .tns-controls button {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 9999px;
+      padding: 0.5rem 1rem;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.05);
+      transition: background 0.3s ease;
+    }
+    .tns-controls button:hover {
+      background-color: #f0f0f0;
+    }
     </style>
   </head>
   <body class="bg-gray-100 text-gray-800 font-sans">
@@ -126,19 +149,21 @@
         tns({
           container: '.my-slider',
           items: 1,
-          slideBy: 'page',
+          slideBy: 1,
           autoplay: true,
+          autoplayTimeout: 5000,
+          speed: 500, // smoother transition
           controls: true,
+          controlsText: ['←', '→'],
           nav: false,
           gutter: 24,
-          autoplayTimeout: 5000,
-          controlsText: ['←', '→'],
           responsive: {
             768: { items: 2 },
             1024: { items: 3 }
           }
         });
       }
+
     </script>
   </body>
 </html>
