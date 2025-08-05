@@ -1079,7 +1079,7 @@ video {
 }
 
 .my-slider .tns-item {
-  display: flex;
+  display: flex !important;
   justify-content: center;
   padding: 1rem;
 }
