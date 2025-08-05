@@ -63,6 +63,28 @@
     .tns-controls button:hover {
       background-color: #f0f0f0;
     }
+    .tns-outer {
+  position: relative;
+}
+
+.tns-slider {
+  transition-timing-function: ease-in-out !important;
+  transition-duration: 800ms !important;
+}
+
+.my-slider .card {
+  height: 100%;
+  min-height: 100%;
+}
+
+.carousel-prev,
+.carousel-next {
+  z-index: 10;
+  font-size: 1.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+}
+
     </style>
   </head>
   <body class="bg-gray-100 text-gray-800 font-sans">
@@ -80,16 +102,19 @@
     <section class="w-100 vh-100 d-flex justify-content-center align-items-center">
       <h1 id="typewriter"></h1>
     </section>
-
-    <!-- Projects Carousel -->
+    <!--Project Carousal -->
     <section id="projects-carousel" class="py-5 bg-light">
-      <div class="container">
+      <div class="container position-relative">
         <h2 class="h3 text-center mb-4">Latest Projects</h2>
         <div class="my-slider">
           <!-- JS ile doldurulacak -->
         </div>
+        <!-- Carousel Butonları -->
+        <button class="carousel-prev btn btn-light shadow position-absolute bottom-0 start-0 m-3">←</button>
+        <button class="carousel-next btn btn-light shadow position-absolute bottom-0 end-0 m-3">→</button>
       </div>
     </section>
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.3/min/tiny-slider.js"></script>
     <script type="module">
