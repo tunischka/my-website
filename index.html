@@ -138,8 +138,8 @@
   </section>
 
   <!-- Projects Carousel -->
-  <section class="py-5 bg-light overflow-hidden">
-   <div class="container position-relative overflow-hidden">
+  <section class="py-5 bg-light">
+   <div class="container position-relative">
       <h2 class="h3 text-center mb-4">Latest Projects</h2>
 
       <div class="my-slider tns-outer">
@@ -188,7 +188,7 @@
         .then(slides => {
           slides.forEach(p => {
             const card = document.createElement('div');
-            card.className = 'card p-4 mx-3';
+            card.className = 'card p-4';
             card.innerHTML = `
               <h3 class="h5 fw-bold mb-2">${p.title}</h3>
               <p class="mb-2">${p.description}</p>
@@ -202,7 +202,7 @@
 
     function initCarousel() {
       tns({
-        container: ".my-slider",
+        container: ".my-slider .tns-slider",
         items: 1,
         slideBy: "page",
         autoplay: true,
@@ -214,8 +214,8 @@
         gutter: 24,
         speed: 800,
         mouseDrag: true,
-        edgePadding: 40,    // kenarlarda 40px boşluk bırakır
-        center: true,       // slaytları ortalar
+        edgePadding:0,    // kenarlarda 40px boşluk bırakır
+        center: false,       // slaytları ortalar
         responsive: {
           768: { items: 2 },
           1024: { items: 3 }
