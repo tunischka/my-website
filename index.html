@@ -4,7 +4,28 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="style.css" rel="stylesheet" />
+    <!-- Bubbly font -->
+    <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap" rel="stylesheet" />
     <title>Tuna</title>
+    <style>
+      /* Typewriter and color animation */
+      #typewriter {
+        font-family: 'Bubblegum Sans', cursive;
+        font-size: 16rem;
+        background: linear-gradient(270deg, #FFC1CC, #B3E5FC, #FFDAB9);
+        background-size: 600% 600%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: gradientShift 8s ease infinite;
+        white-space: nowrap;
+        text-align: center;
+      }
+      @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+    </style>
   </head>
   <body class="bg-gray-100 text-gray-800 font-sans">
     <!-- 🧭 Navbar -->
@@ -13,21 +34,70 @@
       <ul class="flex gap-4">
         <li><a href="index.html" class="hover:text-blue-500">Home</a></li>
         <li><a href="cv.html" class="hover:text-blue-500">CV</a></li>
-        <li><a href="projects.html" class="hover: text-blue-600">Projects</a></li>
+        <li><a href="projects.html" class="hover:text-blue-600">Projects</a></li>
       </ul>
     </nav>
 
-    <!-- Ana içerik -->
-    <section class="mt-10 text-center text-gray-700">
-        <p class="text-lg font-semibold">Only one door is unlocked... 🔐</p>
-        <p class="mt-2 italic text-sm">
-          <code class="bg-gray-100 px-3 py-2 rounded-md text-gray-600">
-            Ktw stb, tsqd rd HA ufjl nx fynaj ts ymty uzwtuzq xtyj. Twijw xjhwynts htrnsl xttsh!
-          </code>
-        </p>
-        <p class="mt-4 text-xs text-gray-500">
-          Hint: Both a salad and a Roman 👑 — shift by <strong>5</strong>.
-        </p>
-      </section>
+    <!-- Typewriter Hero -->
+    <section class="w-full h-screen flex justify-center items-center">
+      <div class="text-center">
+        <h1 id="typewriter"></h1>
+      </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.3/min/tiny-slider.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const text = "Tuna ";
+        let idx = 0;
+        const el = document.getElementById("typewriter");
+        function tick() {
+          if (idx <= text.length) {
+            el.textContent = text.slice(0, idx++);
+            setTimeout(tick, 150);
+          } else {
+            // Pause before restarting
+            setTimeout(() => {
+              idx = 0;
+              el.textContent = '';
+              tick();
+            }, 5000);
+          }
+        }
+        tick();
+
+       // Fetch project cards dynamically from projects.html
+        const sliderContainer = document.querySelector('.my-slider');
+        fetch('projects.html')
+          .then(response => response.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const cards = doc.querySelectorAll('#projectGrid .card');
+            cards.forEach(card => {
+              sliderContainer.appendChild(card.cloneNode(true));
+            });
+            initSlider();
+          })
+          .catch(err => console.error('Error loading projects:', err));
+
+        // Initialize Tiny Slider
+        function initSlider() {
+          tns({
+            container: '.my-slider',
+            items: 1,
+            slideBy: 'page',
+            autoplay: true,
+            controls: true,
+            nav: true,
+            gutter: 16,
+            autoplayTimeout: 3000,
+            autoplayButton: false
+          });
+        }
+      });
+    </script>
   </body>
 </html>
