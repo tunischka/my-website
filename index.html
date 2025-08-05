@@ -174,19 +174,23 @@
         tns({
           container: '.my-slider',
           items: 1,
-          slideBy: 1,
+          slideBy: 'page',
           autoplay: true,
           autoplayTimeout: 5000,
-          speed: 500, // smoother transition
+          autoplayButtonOutput: false,
           controls: true,
           controlsText: ['←', '→'],
           nav: false,
           gutter: 24,
+          speed: 800,
+          mouseDrag: true,
+          controlsContainer: null, // Varsayılan kontrolleri kullanma
           responsive: {
             768: { items: 2 },
             1024: { items: 3 }
           }
         });
+
       }
 
     </script>
