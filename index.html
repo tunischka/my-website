@@ -15,7 +15,6 @@
 
     <title>Tuna</title>
     <style>
-      /* Typewriter and color animation */
       #typewriter {
         font-family: 'Bubblegum Sans', cursive;
         font-size: 16rem;
@@ -32,41 +31,48 @@
         50% { background-position: 100% 50%; }
         100% { background-position: 0% 50%; }
       }
+
+      /* Badge capsule style */
+      .badge.tag-pill {
+        border: 1px solid currentColor;
+        border-radius: 9999px;
+        padding: .35em .6em;
+        font-weight: 500;
+        background: transparent;
+      }
     </style>
   </head>
   <body class="bg-gray-100 text-gray-800 font-sans">
-    <!-- 🧭 Navbar -->
-    <nav class="bg-white shadow p-4 flex justify-between items-center">
-      <h1 class="text-xl font-bold">Tuna</h1>
-      <ul class="flex gap-4">
-        <li><a href="index.html" class="hover:text-blue-500">Home</a></li>
-        <li><a href="cv.html" class="hover:text-blue-500">CV</a></li>
-        <li><a href="projects.html" class="hover:text-blue-600">Projects</a></li>
+    <!-- Navbar -->
+    <nav class="bg-white shadow p-4 d-flex justify-content-between align-items-center">
+      <h1 class="h4 fw-bold mb-0">Tuna</h1>
+      <ul class="d-flex gap-3 list-unstyled mb-0">
+        <li><a href="index.html" class="text-decoration-none">Home</a></li>
+        <li><a href="cv.html" class="text-decoration-none">CV</a></li>
+        <li><a href="projects.html" class="text-decoration-none fw-semibold">Projects</a></li>
       </ul>
     </nav>
 
-    <!-- Typewriter Hero -->
-    <section class="w-full h-screen flex justify-center items-center">
-      <div class="text-center">
-        <h1 id="typewriter"></h1>
-      </div>
+    <!-- Hero -->
+    <section class="w-100 vh-100 d-flex justify-content-center align-items-center">
+      <h1 id="typewriter"></h1>
     </section>
 
-    <!-- Projects Carousel on Home -->
-    <section id="projects-carousel" class="py-5 bg-gray-50">
+    <!-- Projects Carousel -->
+    <section id="projects-carousel" class="py-5 bg-light">
       <div class="container">
         <h2 class="h3 text-center mb-4">Latest Projects</h2>
-        <div class="my-slider row g-4">
-          <!-- Burası JS ile doldurulacak -->
+        <div class="my-slider">
+          <!-- JS ile doldurulacak -->
         </div>
       </div>
     </section>
 
-    <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.3/min/tiny-slider.js"></script>
-    <script>
+    <script type="module">
+      import { TAGS, colourOfIndex } from './assets/tags.js';
+
       document.addEventListener("DOMContentLoaded", () => {
-        // Typewriter Effect
         const text = "Tuna ";
         let idx = 0;
         const el = document.getElementById("typewriter");
@@ -80,30 +86,40 @@
         }
         tick();
 
-        // Fetch projects.json and populate carousel
         const sliderContainer = document.querySelector('.my-slider');
         fetch('./projects.json')
           .then(res => res.json())
           .then(list => {
             list.forEach(p => {
-              const col = document.createElement('div');
-              col.className = 'col-12';
-              col.innerHTML = `
-                <div class="card shadow-lg rounded-4 overflow-hidden p-4 position-relative"
-                     data-title="${p.title}"
-                     data-tags="${p.tags.join(',')}">
-                  <a href="${p.url}" class="stretched-link">
-                    <span class="visually-hidden">Open ${p.title} project</span>
-                  </a>
-                  <h3 class="h5 fw-bold mb-2">${p.title}</h3>
-                  <p class="mb-2">${p.description}</p>
-                </div>
+              const card = document.createElement('div');
+              card.className = 'card shadow-lg rounded-4 overflow-hidden p-4 position-relative mx-3';
+              card.dataset.title = p.title;
+              card.dataset.tags = p.tags.join(',');
+              card.innerHTML = `
+                <a href="${p.url}" class="stretched-link"><span class="visually-hidden">Open ${p.title}</span></a>
+                <h3 class="h5 fw-bold mb-2">${p.title}</h3>
+                <p class="mb-2">${p.description}</p>
               `;
-              sliderContainer.appendChild(col);
+
+              const badgeRow = document.createElement('p');
+              badgeRow.className = 'mt-3 tag-badges';
+              p.tags.forEach(id => {
+                const idx = TAGS.findIndex(t => t.id === id);
+                if (idx !== -1) {
+                  const { text, fill } = colourOfIndex(idx);
+                  const span = document.createElement('span');
+                  span.className = 'badge tag-pill me-1';
+                  span.style.color = text;
+                  span.style.background = fill;
+                  span.textContent = TAGS[idx].label;
+                  badgeRow.appendChild(span);
+                }
+              });
+              card.appendChild(badgeRow);
+              sliderContainer.appendChild(card);
             });
             initSlider();
-          })
-          .catch(err => console.error('Error loading projects:', err));
+          });
       });
 
       function initSlider() {
@@ -113,11 +129,14 @@
           slideBy: 'page',
           autoplay: true,
           controls: true,
-          nav: true,
-          gutter: 16,
-          autoplayTimeout: 4000,
-          autoplayButton: false,
-          controlsText: ['←', '→']
+          nav: false,
+          gutter: 24,
+          autoplayTimeout: 5000,
+          controlsText: ['←', '→'],
+          responsive: {
+            768: { items: 2 },
+            1024: { items: 3 }
+          }
         });
       }
     </script>
