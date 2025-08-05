@@ -86,10 +86,8 @@
           .then(html => {
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
-            const cards = doc.querySelectorAll('#projectGrid .card');
-            cards.forEach(card => {
-              sliderContainer.appendChild(card.cloneNode(true));
-            });
+            const cols = doc.querySelectorAll('#projectGrid > .col-12');
+              cols.forEach(col => sliderContainer.appendChild(col.cloneNode(true)));
             initSlider();
           })
           .catch(err => console.error('Error loading projects:', err));
