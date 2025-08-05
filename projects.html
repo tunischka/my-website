@@ -35,7 +35,7 @@
   </div>
 </section>
 
-<!-- Filter bar (buttons injected by JS) -->
+<!-- Filter bar -->
 <section class="py-3">
   <div class="container d-flex flex-wrap align-items-center gap-3">
     <div class="input-group" style="max-width:220px;">
@@ -45,46 +45,15 @@
         <option value="za">Z - A</option>
       </select>
     </div>
-
     <div id="tagFilters" class="d-flex flex-wrap gap-2"></div>
   </div>
 </section>
 
-<!-- Project cards -->
+<!-- Dynamic Project Grid -->
 <section class="article07 my-5">
   <div class="container">
     <div class="row g-4" id="projectGrid">
-
-      <div class="col-12">
-        <div class="card shadow-lg rounded-4 overflow-hidden p-4 position-relative"
-             data-title="Angler Exploit Kit – PCAP Network Forensics Case Study"
-             data-tags="forensics,malware">
-          <a href="projects/Angler-Exploit-Kit.html" class="stretched-link"><span class="visually-hidden">Open Angler Exploit Kit project</span></a>
-          <h3 class="h5 fw-bold mb-2">Angler Exploit Kit – PCAP Network Forensics Case Study</h3>
-          <p class="mb-2">PCAP forensics on a multi-stage Angler EK attack chain using malicious Java payloads.</p>
-        </div>
-      </div>
-
-      <div class="col-12">
-        <div class="card shadow-lg rounded-4 overflow-hidden p-4 position-relative"
-             data-title="Vulnversity – TryHackMe CTF Walkthrough"
-             data-tags="ctf,web-exploitation">
-          <a href="projects/vulnversity.html" class="stretched-link"><span class="visually-hidden">Open Vulnversity project</span></a>
-          <h3 class="h5 fw-bold mb-2">Vulnversity – TryHackMe CTF Walkthrough</h3>
-          <p class="mb-2">This write-up covers my walkthrough of the Vulnversity CTF room on TryHackMe, aimed at building foundational skills in web exploitation.</p>
-        </div>
-      </div>
-
-      <div class="col-12">
-        <div class="card shadow-lg rounded-4 overflow-hidden p-4 position-relative"
-             data-title="Vulnversity – TryHackMe CTF Walkthrough"
-             data-tags="ctf,priv-escalation">
-          <a href="projects/wonderland.html" class="stretched-link"><span class="visually-hidden">Open Vulnversity project</span></a>
-          <h3 class="h5 fw-bold mb-2">Wonderland – TryHackMe CTF Walkthrough</h3>
-          <p class="mb-2">This write-up covers my walkthrough of the Wonderland CTF room on TryHackMe, aimed at building foundational skills in privilege escalation. </p>
-        </div>
-      </div>
-
+      <!-- JS will populate cards here -->
     </div>
   </div>
 </section>
@@ -102,89 +71,100 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- ========= Tag & Filter Logic ========= -->
+<!-- ========= Dynamic JSON, Tag & Filter Logic ========= -->
 <script type="module">
   import { TAGS, colourOfIndex } from './assets/tags.js';
-
-  // 1) Filtre butonlarını oluştur
+  const grid = document.getElementById('projectGrid');
   const bar = document.getElementById('tagFilters');
+  const sortSelect = document.getElementById('sortSelect');
+  let activeTag = new URLSearchParams(window.location.search).get('tag') || 'all';
+
+  // Create filter buttons
   ['all', ...TAGS.map(t => t.id)].forEach((tag, i) => {
     const btn = document.createElement('button');
-    btn.className = i === 0
-      ? 'btn btn-secondary btn-sm active'
-      : 'btn btn-outline-secondary btn-sm';
+    btn.className = i === 0 ? 'btn btn-secondary btn-sm active' : 'btn btn-outline-secondary btn-sm';
     btn.dataset.tag = tag;
-    btn.textContent = tag === 'all'
-      ? 'All'
-      : TAGS.find(t => t.id === tag).label;
+    btn.textContent = tag === 'all' ? 'All' : TAGS.find(t => t.id === tag).label;
     bar.appendChild(btn);
   });
 
-  // 2) Kartları topla
-  const grid  = document.getElementById('projectGrid');
-  const cards = Array.from(grid.querySelectorAll('.card'));
-  let activeTag = new URLSearchParams(window.location.search).get('tag') || 'all';
+  // Fetch projects.json and render
+  fetch('./projects.json')
+    .then(res => res.json())
+    .then(list => {
+      // Populate grid
+      list.forEach(p => {
+        const col = document.createElement('div');
+        col.className = 'col-12';
+        col.innerHTML = `
+          <div class="card shadow-lg rounded-4 overflow-hidden p-4 position-relative"
+               data-title="${p.title}"
+               data-tags="${p.tags.join(',')}">
+            <a href="${p.url}" class="stretched-link"><span class="visually-hidden">Open ${p.title} project</span></a>
+            <h3 class="h5 fw-bold mb-2">${p.title}</h3>
+            <p class="mb-2">${p.description}</p>
+          </div>`;
+        grid.appendChild(col);
+      });
+      initControls();
+    })
+    .catch(err => console.error('Error loading projects:', err));
 
-  // URL'den gelen tag geçerliyse o butonu seçili yap
-  if (activeTag !== 'all') {
-    bar.querySelectorAll('button').forEach(b =>
-      b.classList.toggle('active', b.dataset.tag === activeTag)
-    );
-  }
+  function initControls() {
+    // Highlight active tag button
+    if (activeTag !== 'all') {
+      bar.querySelectorAll('button').forEach(b => b.classList.toggle('active', b.dataset.tag === activeTag));
+    }
 
-  // 3) Rozet ekleme + filtreleme
-  function addBadges(card) {
-    if (card.querySelector('.tag-badges')) return;
-    const wrapper = document.createElement('p');
-    wrapper.className = 'mt-3 tag-badges';
-    card.dataset.tags.split(',').map(t => t.trim()).forEach(id => {
-      const idx = TAGS.findIndex(t => t.id === id);
-      const { text, fill } = colourOfIndex(idx);
-      const span = document.createElement('span');
-      span.className = 'badge tag-pill me-1';
-      span.style.color = text;
-      span.style.background = fill;
-      span.textContent = TAGS[idx].label;
-      wrapper.appendChild(span);
+    // Render badges and filter
+    function render() {
+      const cards = Array.from(grid.querySelectorAll('.card'));
+      cards.forEach(card => {
+        // Add badges if missing
+        if (!card.querySelector('.tag-badges')) {
+          const wrapper = document.createElement('p');
+          wrapper.className = 'mt-3 tag-badges';
+          card.dataset.tags.split(',').map(t => t.trim()).forEach(id => {
+            const idx = TAGS.findIndex(t => t.id === id);
+            const { text, fill } = colourOfIndex(idx);
+            const span = document.createElement('span');
+            span.className = 'badge tag-pill me-1';
+            span.style.color = text;
+            span.style.background = fill;
+            span.textContent = TAGS[idx].label;
+            wrapper.appendChild(span);
+          });
+          card.appendChild(wrapper);
+        }
+        // Filter display
+        const tags = card.dataset.tags.split(',').map(t => t.trim());
+        card.parentElement.style.display = activeTag === 'all' || tags.includes(activeTag) ? '' : 'none';
+      });
+    }
+
+    // Tag click handler
+    bar.addEventListener('click', e => {
+      if (!e.target.dataset.tag) return;
+      activeTag = e.target.dataset.tag;
+      bar.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === e.target));
+      render();
     });
-    card.appendChild(wrapper);
-  }
 
-  function render() {
-    cards.forEach(addBadges);
-    cards.forEach(card => {
-      const tags = card.dataset.tags.split(',').map(t => t.trim());
-      card.parentElement.style.display =
-        activeTag === 'all' || tags.includes(activeTag)
-          ? ''
-          : 'none';
+    // Sort handler
+    sortSelect.addEventListener('change', e => {
+      const asc = e.target.value === 'az';
+      const cols = Array.from(grid.querySelectorAll('.col-12'));
+      cols.sort((a, b) => {
+        const aT = a.querySelector('.card').dataset.title.toLowerCase();
+        const bT = b.querySelector('.card').dataset.title.toLowerCase();
+        return asc ? aT.localeCompare(bT) : bT.localeCompare(aT);
+      }).forEach(col => grid.appendChild(col));
+      render();
     });
-  }
 
-  // 4) Buton click handler
-  bar.addEventListener('click', e => {
-    if (!e.target.dataset.tag) return;
-    activeTag = e.target.dataset.tag;
-    bar.querySelectorAll('button').forEach(b =>
-      b.classList.toggle('active', b === e.target)
-    );
+    // Initial render
     render();
-  });
-
-  // 5) Sıralama dropdown’u
-  document.getElementById('sortSelect').addEventListener('change', e => {
-    const asc = e.target.value === 'az';
-    const sorted = cards.slice().sort((a, b) => {
-      const aT = a.dataset.title.toLowerCase();
-      const bT = b.dataset.title.toLowerCase();
-      return asc ? aT.localeCompare(bT) : bT.localeCompare(aT);
-    });
-    sorted.forEach(c => grid.appendChild(c.parentElement));
-    render();
-  });
-
-  // İlk render
-  render();
+  }
 </script>
 
 </body>

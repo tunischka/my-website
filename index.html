@@ -6,6 +6,8 @@
     <link href="style.css" rel="stylesheet" />
     <!-- Bubbly font -->
     <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap" rel="stylesheet" />
+    <!-- Tiny Slider CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.3/tiny-slider.css" />
     <title>Tuna</title>
     <style>
       /* Typewriter and color animation */
@@ -47,20 +49,19 @@
 
     <!-- Projects Carousel on Home -->
     <section id="projects-carousel" class="py-5 bg-gray-50">
-    <div class="container">
+      <div class="container">
         <h2 class="h3 text-center mb-4">Latest Projects</h2>
         <div class="my-slider row g-4">
-        <!-- Burası JS ile doldurulacak -->
+          <!-- Burası JS ile doldurulacak -->
         </div>
       </div>
     </section>
 
-
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.3/min/tiny-slider.js"></script>
-
     <script>
       document.addEventListener("DOMContentLoaded", () => {
+        // Typewriter Effect
         const text = "Tuna ";
         let idx = 0;
         const el = document.getElementById("typewriter");
@@ -69,44 +70,50 @@
             el.textContent = text.slice(0, idx++);
             setTimeout(tick, 150);
           } else {
-            // Pause before restarting
-            setTimeout(() => {
-              idx = 0;
-              el.textContent = '';
-              tick();
-            }, 5000);
+            setTimeout(() => { idx = 0; el.textContent = ''; tick(); }, 5000);
           }
         }
         tick();
 
-       // Fetch project cards dynamically from projects.html
+        // Fetch projects.json and populate carousel
         const sliderContainer = document.querySelector('.my-slider');
-        fetch('./projects.html')
-          .then(response => response.text())
-          .then(html => {
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
-            const cols = doc.querySelectorAll('#projectGrid > .col-12');
-              cols.forEach(col => sliderContainer.appendChild(col.cloneNode(true)));
+        fetch('./projects.json')
+          .then(res => res.json())
+          .then(list => {
+            list.forEach(p => {
+              const col = document.createElement('div');
+              col.className = 'col-12';
+              col.innerHTML = `
+                <div class="card shadow-lg rounded-4 overflow-hidden p-4 position-relative"
+                     data-title="${p.title}"
+                     data-tags="${p.tags.join(',')}">
+                  <a href="${p.url}" class="stretched-link">
+                    <span class="visually-hidden">Open ${p.title} project</span>
+                  </a>
+                  <h3 class="h5 fw-bold mb-2">${p.title}</h3>
+                  <p class="mb-2">${p.description}</p>
+                </div>
+              `;
+              sliderContainer.appendChild(col);
+            });
             initSlider();
           })
           .catch(err => console.error('Error loading projects:', err));
-
-        // Initialize Tiny Slider
-        function initSlider() {
-          tns({
-            container: '.my-slider',
-            items: 1,
-            slideBy: 'page',
-            autoplay: true,
-            controls: true,
-            nav: true,
-            gutter: 16,
-            autoplayTimeout: 3000,
-            autoplayButton: false
-          });
-        }
       });
+
+      function initSlider() {
+        tns({
+          container: '.my-slider',
+          items: 1,
+          slideBy: 'page',
+          autoplay: true,
+          controls: true,
+          nav: true,
+          gutter: 16,
+          autoplayTimeout: 3000,
+          autoplayButton: false
+        });
+      }
     </script>
   </body>
 </html>

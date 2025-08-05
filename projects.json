@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Angler Exploit Kit – PCAP Network Forensics Case Study",
+    "url": "projects/Angler-Exploit-Kit.html",
+    "description": "PCAP forensics on a multi-stage Angler EK attack chain using malicious Java payloads.",
+    "tags": ["forensics", "malware"]
+  },
+  {
+    "title": "Vulnversity – TryHackMe CTF Walkthrough",
+    "url": "projects/vulnversity.html",
+    "description": "This write-up covers my walkthrough of the Vulnversity CTF room on TryHackMe, aimed at building foundational skills in web exploitation.",
+    "tags": ["ctf", "web-exploitation"]
+  },
+  {
+    "title": "Wonderland – TryHackMe CTF Walkthrough",
+    "url": "projects/wonderland.html",
+    "description": "This write-up covers my walkthrough of the Wonderland CTF room on TryHackMe, aimed at building foundational skills in privilege escalation.",
+    "tags": ["ctf", "priv-escalation"]
+  }
+]
