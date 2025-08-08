@@ -1070,48 +1070,34 @@ video {
     align-items: flex-start;
   }
 }
+/* ===== Global dark-mode remap (Tailwind + Bootstrapa uyum) ===== */
 
-@media (min-width: 768px) {
-  .md\:text-4xl {
-    font-size: 2.25rem;
-    line-height: 2.5rem;
-  }
-}
+/* Temel */
+:root[data-theme="dark"] body{ background:var(--bg); color:var(--fg); }
 
+/* Arka planlar */
+:root[data-theme="dark"] .bg-white{ background:var(--card) !important; }
+:root[data-theme="dark"] .bg-gray-50,
+:root[data-theme="dark"] .bg-gray-100{ background:var(--surface) !important; }
 
+/* Metin grileri -> tema metni */
+:root[data-theme="dark"] .text-gray-900{ color:var(--fg) !important; }
+:root[data-theme="dark"] .text-gray-800{ color:var(--fg) !important; opacity:.95; }
+:root[data-theme="dark"] .text-gray-700{ color:var(--fg) !important; opacity:.9; }
+:root[data-theme="dark"] .text-gray-600{ color:var(--fg) !important; opacity:.85; }
+:root[data-theme="dark"] .text-gray-500,
+:root[data-theme="dark"] .text-gray-400{ color:var(--fg) !important; opacity:.75; }
 
+/* Kenarlık ve gölgeler */
+:root[data-theme="dark"] .border-gray-300{ border-color:rgba(255,255,255,.12) !important; }
+:root[data-theme="dark"] .border-gray-400{ border-color:rgba(255,255,255,.18) !important; }
+:root[data-theme="dark"] .shadow,
+:root[data-theme="dark"] .shadow-md,
+:root[data-theme="dark"] .shadow-lg{ box-shadow:var(--shadow) !important; }
 
-
-
-/* === MY UPDATES=== */
-
-/* === Theme mapping for project pages === */
-
-/* Kapsayıcı: genel metin ve zeminler */
-.article { color: var(--fg); }
-:root[data-theme="dark"] .article { background: var(--bg); }
-
-/* “beyaz panel” gibi görünen container’ları temaya bağla */
-.article .bg-white    { background: var(--card); box-shadow: var(--shadow); }
-.article .bg-gray-50,
-.article .bg-gray-100 { background: var(--surface); }
-
-/* Metin grileri -> temaya uyum (Tailwind gray-900..500 kullanan yerler) */
-.article .text-gray-900,
-.article .text-gray-800,
-.article .text-gray-700,
-.article .text-gray-600,
-.article .text-gray-500,
-.article .text-gray-400 { color: var(--fg); }
-
-/* Kart/çerçeveler */
-.article .shadow,
-.article .shadow-md,
-.article .shadow-lg { box-shadow: var(--shadow); }
+/* Chip/rozet gibi outline'lar */
+:root[data-theme="dark"] .badge,
+:root[data-theme="dark"] .tag-pill{ color:var(--fg) !important; border-color:currentColor !important; background:transparent !important; }
 
 /* Kod blokları */
-.article pre { background: var(--surface); }
-:root[data-theme="dark"] .article pre { background: #0f141b; }
-
-/* Link hoverları çok mavi kaldıysa biraz sakinleştir (opsiyonel) */
-:root[data-theme="dark"] .article a:hover { opacity: .9; }
+:root[data-theme="dark"] pre{ background:#0f141b !important; }
