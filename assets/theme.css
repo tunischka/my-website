@@ -92,13 +92,15 @@ nav a:hover{opacity:.85}
 
 
 /* Shared navbar themes */
+/* NAV eski hâl (orta hizalı container, menü sağda) */
 .nav-main{background:var(--card);position:sticky;top:0;z-index:1000;box-shadow:var(--shadow)}
-/* nav'ı viewport'un sağına kadar uzat */
 .nav-inner{
-  max-width: none;          /* container sınırını kaldır */
-  padding: 12px 4 12px 16px;/* sağdaki iç boşluğu 0 yap (istersen 8px ver) */
+  max-width:1100px;       /* tekrar sınırlı genişlik */
+  margin:0 auto;          /* ortala */
+  padding:12px 16px;      /* sağ paddingle oynamayı durdur */
+  display:flex;align-items:center;justify-content:space-between;
 }
-.nav-main .menu{ margin-left:auto; } /* menü bloğunu sağa it */
+.nav-main .menu{ margin-left:auto; } /* linkleri sağa it */
 
 .nav-main .brand{font-weight:800;text-decoration:none;color:var(--fg)}
 .nav-main .menu{display:flex;align-items:center;gap:16px;list-style:none;margin:0;padding:0}
