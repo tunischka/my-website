@@ -57,3 +57,17 @@ nav a:hover{opacity:.85}
 @keyframes pill-out{to{opacity:0;max-width:0;padding-right:0}}
 /* Floating fallback (buton yoksa) */
 .theme-floating{position:fixed;right:16px;bottom:16px;z-index:9999}
+
+
+/* Shared navbar themes */
+.nav-main{background:var(--card);position:sticky;top:0;z-index:1000;box-shadow:var(--shadow)}
+.nav-inner{max-width:1100px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
+.nav-main .brand{font-weight:800;text-decoration:none;color:var(--fg)}
+.nav-main .menu{display:flex;align-items:center;gap:16px;list-style:none;margin:0;padding:0}
+.nav-main a{color:var(--fg);text-decoration:none;opacity:1;mix-blend-mode:normal}
+.nav-main a:hover{opacity:.85}
+.nav-main a.active{font-weight:700}
+#themeToggle{
+  padding:6px 10px;border-radius:9999px;border:1px solid rgba(0,0,0,.15);
+  background:var(--card);color:var(--fg);box-shadow:0 6px 18px rgba(0,0,0,.12);cursor:pointer
+}

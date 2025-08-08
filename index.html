@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Tuna</title>
 
+  <!--!! ÖNEMLİ: repo kökü -->
+  <base href="/my-website/">
+
   <!-- Bubbly font -->
   <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap" rel="stylesheet"/>
 
@@ -314,20 +317,15 @@ h1, h2, h3 { margin: 0; }
 </style>
 <!-- Dark/Light Mode -->
 <link rel="stylesheet" href="assets/theme.css">
+<meta name="color-scheme" content="light dark">
 <script defer src="assets/theme.js"></script>
-<meta name="color-scheme" content="light dark"> 
+<script defer src="assets/navbar.js"></script>
 
 </head>
 <body>
-  <!-- Navbar -->
-  <nav class="bg-white shadow p-4 d-flex justify-content-between align-items-center">
-    <h1 class="h4 fw-bold mb-0">Tuna</h1>
-    <ul class="d-flex gap-3 list-unstyled mb-0">
-      <li><a href="index.html" class="text-decoration-none">Home</a></li>
-      <li><a href="cv.html" class="text-decoration-none">CV</a></li>
-      <li><a href="projects.html" class="text-decoration-none fw-semibold">Projects</a></li>
-    </ul>
-  </nav>
+  <!-- Navbar Hook -->
+  <div id="site-nav"></div>
+
 
   <!-- Hero with Typewriter -->
   <section class="hero w-100 vh-100 d-flex justify-content-center align-items-center">
