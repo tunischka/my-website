@@ -263,13 +263,15 @@ h1, h2, h3 { margin: 0; }
   z-index: 5;
 }
 /* ---- Fix: allow hovered cards to overflow slider wrappers ---- */
+/* Hover'da kartlar taşsın ama sayfa genişlemesin */
 .tns-ovh,
 .tns-inner,
-.tns-slider,
+.my-slider .tns-item { overflow: visible !important; }
+
+/* KRİTİK: track ve dış kap gizli kalsın */
 .tns-outer,
-.my-slider .tns-item {
-  overflow: visible !important;
-}
+.tns-slider { overflow: hidden !important; }
+
 /* ---- Carousel Controls ---- */
 .tns-controls {
   position: absolute;
