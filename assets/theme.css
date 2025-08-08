@@ -1,0 +1,59 @@
+/* ===== Theme variables ===== */
+:root{
+  --bg:#f8f9fa;      /* page background */
+  --fg:#212529;      /* text */
+  --card:#ffffff;    /* cards / navbar */
+  --surface:#f3f5f7; /* sections like .bg-light */
+  --muted:#6c757d;
+  --shadow:0 12px 30px rgba(0,0,0,.08);
+}
+:root[data-theme="dark"]{
+  --bg:#0e1116;
+  --fg:#e6e6e6;
+  --card:#151a21;
+  --surface:#0f141b;
+  --muted:#a0a7b4;
+  --shadow:0 12px 30px rgba(0,0,0,.35);
+}
+
+/* ===== Base mapping ===== */
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg)}
+.card{background:var(--card);box-shadow:var(--shadow)}
+.text-muted{color:var(--muted)!important}
+.bg-light{background:var(--surface)!important}
+
+/* Navbar */
+nav{background:var(--card)!important;position:relative;z-index:1000}
+nav h1,nav a{color:var(--fg)!important}
+nav a:hover{opacity:.85}
+
+/* Sections / components */
+.py-5.bg-light h2{color:var(--fg)!important;opacity:1}
+.my-slider .card{background:var(--card);color:var(--fg)}
+.my-slider .card h3,.my-slider .card p,.my-slider .card .badge{color:var(--fg)}
+
+/* Dark-mode tweak for hero text (optional) */
+:root[data-theme="dark"] #typewriter{filter:saturate(.9) brightness(1.15)}
+
+/* ===== Toggle button + pill ===== */
+.theme-wrap{position:relative;display:inline-block}
+#themeToggle{
+  padding:10px 12px;border-radius:9999px;border:1px solid rgba(0,0,0,.15);
+  background:var(--card);color:var(--fg);box-shadow:0 6px 18px rgba(0,0,0,.12);
+  cursor:pointer
+}
+.theme-pill{
+  position:absolute;top:50%;left:calc(100% + 8px);transform:translateY(-50%);
+  white-space:nowrap;background:var(--card);color:var(--fg);
+  border:1px solid rgba(0,0,0,.12);border-radius:9999px;padding:8px 12px;
+  box-shadow:0 8px 24px rgba(0,0,0,.12);
+  opacity:0;pointer-events:none;max-width:0;overflow:hidden
+}
+.theme-pill.show{
+  animation:pill-in .2s ease-out forwards, pill-out .7s ease-in 1.4s forwards;
+}
+@keyframes pill-in{from{opacity:0;max-width:0;padding-right:0}to{opacity:1;max-width:340px;padding-right:12px}}
+@keyframes pill-out{to{opacity:0;max-width:0;padding-right:0}}
+/* Floating fallback (buton yoksa) */
+.theme-floating{position:fixed;right:16px;bottom:16px;z-index:9999}
