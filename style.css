@@ -1077,3 +1077,41 @@ video {
     line-height: 2.5rem;
   }
 }
+
+
+
+
+
+
+/* === MY UPDATES=== */
+
+/* === Theme mapping for project pages === */
+
+/* Kapsayıcı: genel metin ve zeminler */
+.article { color: var(--fg); }
+:root[data-theme="dark"] .article { background: var(--bg); }
+
+/* “beyaz panel” gibi görünen container’ları temaya bağla */
+.article .bg-white    { background: var(--card); box-shadow: var(--shadow); }
+.article .bg-gray-50,
+.article .bg-gray-100 { background: var(--surface); }
+
+/* Metin grileri -> temaya uyum (Tailwind gray-900..500 kullanan yerler) */
+.article .text-gray-900,
+.article .text-gray-800,
+.article .text-gray-700,
+.article .text-gray-600,
+.article .text-gray-500,
+.article .text-gray-400 { color: var(--fg); }
+
+/* Kart/çerçeveler */
+.article .shadow,
+.article .shadow-md,
+.article .shadow-lg { box-shadow: var(--shadow); }
+
+/* Kod blokları */
+.article pre { background: var(--surface); }
+:root[data-theme="dark"] .article pre { background: #0f141b; }
+
+/* Link hoverları çok mavi kaldıysa biraz sakinleştir (opsiyonel) */
+:root[data-theme="dark"] .article a:hover { opacity: .9; }
