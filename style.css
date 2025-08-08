@@ -1070,34 +1070,3 @@ video {
     align-items: flex-start;
   }
 }
-/* ===== Global dark-mode remap (Tailwind + Bootstrapa uyum) ===== */
-
-/* Temel */
-:root[data-theme="dark"] body{ background:var(--bg); color:var(--fg); }
-
-/* Arka planlar */
-:root[data-theme="dark"] .bg-white{ background:var(--card) !important; }
-:root[data-theme="dark"] .bg-gray-50,
-:root[data-theme="dark"] .bg-gray-100{ background:var(--surface) !important; }
-
-/* Metin grileri -> tema metni */
-:root[data-theme="dark"] .text-gray-900{ color:var(--fg) !important; }
-:root[data-theme="dark"] .text-gray-800{ color:var(--fg) !important; opacity:.95; }
-:root[data-theme="dark"] .text-gray-700{ color:var(--fg) !important; opacity:.9; }
-:root[data-theme="dark"] .text-gray-600{ color:var(--fg) !important; opacity:.85; }
-:root[data-theme="dark"] .text-gray-500,
-:root[data-theme="dark"] .text-gray-400{ color:var(--fg) !important; opacity:.75; }
-
-/* Kenarlık ve gölgeler */
-:root[data-theme="dark"] .border-gray-300{ border-color:rgba(255,255,255,.12) !important; }
-:root[data-theme="dark"] .border-gray-400{ border-color:rgba(255,255,255,.18) !important; }
-:root[data-theme="dark"] .shadow,
-:root[data-theme="dark"] .shadow-md,
-:root[data-theme="dark"] .shadow-lg{ box-shadow:var(--shadow) !important; }
-
-/* Chip/rozet gibi outline'lar */
-:root[data-theme="dark"] .badge,
-:root[data-theme="dark"] .tag-pill{ color:var(--fg) !important; border-color:currentColor !important; background:transparent !important; }
-
-/* Kod blokları */
-:root[data-theme="dark"] pre{ background:#0f141b !important; }
